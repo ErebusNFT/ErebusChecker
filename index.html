@@ -5,578 +5,783 @@
   <title>Erebus – ID Pass WL Checker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    :root {
+      --bg: #05010b;
+      --card-bg: radial-gradient(circle at top left, #2b1449 0, #100318 35%, #05010b 100%);
+      --accent: #b87bff;
+      --accent-soft: rgba(184, 123, 255, 0.3);
+      --accent-strong: rgba(184, 123, 255, 0.9);
+      --text-main: #f9f4ff;
+      --text-soft: #b8a7ff;
+      --text-muted: #7b6caa;
+      --input-bg: rgba(8, 3, 18, 0.8);
+      --pill-bg: linear-gradient(135deg, #251637, #05010b);
+      --pill-border: rgba(247, 239, 255, 0.25);
+      --danger: #ff4d8b;
+      --success: #73ffa1;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    :root {
-      --bg: #05030d;
-      --card: rgba(10, 5, 30, 0.95);
-      --accent: #b76bff;
-      --accent-soft: rgba(183, 107, 255, 0.25);
-      --text-main: #f6f0ff;
-      --text-sub: #a29ac8;
-      --danger: #ff4f6a;
-      --success: #7dffb2;
-      --border-soft: rgba(255, 255, 255, 0.06);
-      --radius-xl: 26px;
-      --radius-pill: 999px;
-      --shadow-soft: 0 40px 120px rgba(0, 0, 0, 0.75);
-      --shadow-glow: 0 0 40px rgba(183, 107, 255, 0.55);
-      --input-bg: rgba(6, 3, 22, 0.95);
-    }
-
     body {
       min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Inter", sans-serif;
-      background:
-        radial-gradient(circle at top left, #3a1b83 0, transparent 55%),
-        radial-gradient(circle at bottom right, #18084a 0, transparent 55%),
-        radial-gradient(circle at center, #05010f 0, #020008 55%, #010007 80%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+      background: radial-gradient(circle at 10% -10%, #2b0c4d 0, #05010b 40%, #020008 100%);
       color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 32px 16px;
+      padding: 24px;
       overflow: hidden;
+    }
+
+    .glow-orb {
+      position: fixed;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(151, 93, 255, 0.6), transparent 70%);
+      filter: blur(2px);
+      opacity: 0.35;
+      z-index: -3;
+      animation: orbFloat 22s ease-in-out infinite alternate;
+    }
+
+    .glow-orb:nth-child(1) {
+      top: -120px;
+      left: -120px;
+    }
+
+    .glow-orb:nth-child(2) {
+      bottom: -160px;
+      right: -80px;
+      animation-delay: 4s;
+      opacity: 0.25;
+      background: radial-gradient(circle, rgba(255, 90, 190, 0.5), transparent 70%);
+    }
+
+    .glow-orb:nth-child(3) {
+      top: 40%;
+      left: 10%;
+      width: 320px;
+      height: 320px;
+      opacity: 0.18;
+      background: radial-gradient(circle, rgba(117, 208, 255, 0.45), transparent 70%);
+      animation-delay: 8s;
+    }
+
+    @keyframes orbFloat {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      50% {
+        transform: translate3d(40px, -30px, 0) scale(1.05);
+      }
+      100% {
+        transform: translate3d(-20px, 30px, 0) scale(1.02);
+      }
     }
 
     .shell {
+      max-width: 1180px;
       width: 100%;
-      max-width: 1240px;
-      background: radial-gradient(circle at top left, rgba(138, 90, 255, 0.25), transparent 60%) 
-                  border-box,
-                  radial-gradient(circle at bottom right, rgba(255, 88, 189, 0.18), transparent 55%) 
-                  border-box,
-                  var(--card);
       border-radius: 32px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: radial-gradient(circle at top left, #35144d 0, #090010 38%, #020008 100%);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.02),
+        0 40px 90px rgba(0, 0, 0, 0.85),
+        0 0 80px rgba(184, 123, 255, 0.2);
+      padding: 32px 32px 40px;
       position: relative;
       overflow: hidden;
-      animation: shellGlow 9s ease-in-out infinite;
+      animation: cardFloat 18s ease-in-out infinite alternate;
     }
 
-    .content {
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
-      gap: 32px;
-      padding: 40px 42px 38px;
+    @keyframes cardFloat {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      100% {
+        transform: translate3d(0, -8px, 0);
+      }
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top center, rgba(218, 160, 255, 0.12), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
       position: relative;
       z-index: 2;
     }
 
-    @media (max-width: 900px) {
-      .content {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 28px;
-        padding: 24px 18px 22px;
-      }
-    }
-
-    .top-row {
+    .brand {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 36px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
     .brand-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: radial-gradient(circle at 30% 20%, #ffffff, #f5e1ff 27%, #b76bff 60%, #432175 100%);
-      box-shadow: var(--shadow-glow);
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #f7e7ff);
+      box-shadow:
+        0 0 0 2px rgba(171, 123, 255, 0.35),
+        0 12px 40px rgba(88, 45, 198, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .brand-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      width: 75%;
+      height: 75%;
+      object-fit: contain;
     }
 
     .brand-text-main {
-      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .brand-title {
+      font-size: 14px;
+      color: var(--text-main);
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .pill {
+      padding: 7px 18px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.08), transparent 70%), var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 0 32px rgba(166, 125, 255, 0.45);
+      font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--text-sub);
+      color: #fdf7ff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .brand-text-sub {
-      font-size: 11px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(199, 188, 255, 0.9);
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #c7ffeb, #73ffa1);
+      box-shadow: 0 0 14px rgba(115, 255, 161, 0.9);
     }
 
-    .tag-pill {
-      font-size: 11px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      padding: 8px 18px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(220, 191, 255, 0.36);
-      color: rgba(226, 208, 255, 0.98);
-      background: radial-gradient(circle at top left, rgba(198, 133, 255, 0.37), transparent 60%) 
-                  rgba(7, 2, 24, 0.96);
-      box-shadow: 0 0 18px rgba(155, 95, 255, 0.45);
-      white-space: nowrap;
+    .content-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 36px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
     }
 
-    .section-label {
+    /* LEFT PANEL (TEXT + CHECKER) */
+
+    .text-block {
+      padding-right: 8px;
+    }
+
+    .eyebrow {
       font-size: 11px;
-      letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: rgba(175, 159, 231, 0.9);
-      margin-bottom: 10px;
+      letter-spacing: 0.24em;
+      color: var(--text-soft);
+      margin-bottom: 12px;
     }
 
     h1 {
-      font-size: 34px;
-      line-height: 1.15;
-      letter-spacing: 0.02em;
-      text-shadow:
-        0 0 18px rgba(183, 107, 255, 0.65),
-        0 0 40px rgba(130, 80, 255, 0.55);
-      margin-bottom: 16px;
+      font-size: 32px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      color: var(--text-main);
+      text-shadow: 0 0 18px rgba(186, 122, 255, 0.65);
     }
 
-    @media (max-width: 900px) {
-      h1 { font-size: 27px; }
-    }
-
-    .lead {
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--text-sub);
+    .subtitle {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-soft);
       max-width: 420px;
     }
 
+    .subtitle strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
     .checker-card {
-      margin-top: 36px;
-      padding: 18px 20px 22px;
-      border-radius: 24px;
-      border: 1px solid var(--border-soft);
-      background:
-        radial-gradient(circle at top left, rgba(120, 69, 255, 0.28), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(208, 117, 255, 0.16), transparent 55%),
-        var(--input-bg);
-      box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
+      margin-top: 28px;
+      padding: 16px 18px 18px;
+      border-radius: 18px;
+      background: linear-gradient(140deg, rgba(9, 0, 20, 0.8), rgba(20, 3, 47, 0.98));
+      border: 1px solid rgba(220, 188, 255, 0.18);
+      box-shadow:
+        0 18px 42px rgba(0, 0, 0, 0.9),
+        0 0 28px rgba(138, 100, 255, 0.25);
+      backdrop-filter: blur(28px);
     }
 
-    .field-label {
-      font-size: 11px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: rgba(178, 164, 240, 0.96);
-      margin-bottom: 8px;
-    }
-
-    .field-help {
-      font-size: 11px;
-      color: rgba(151, 139, 209, 0.95);
-      margin-bottom: 14px;
-    }
-
-    .input-row {
+    .checker-label-row {
       display: flex;
+      justify-content: space-between;
       align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .checker-label {
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .checker-meta {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: stretch;
       gap: 10px;
-      background: rgba(7, 3, 24, 0.96);
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(124, 96, 255, 0.65);
-      padding: 3px 3px 3px 14px;
+      margin-bottom: 10px;
     }
 
-    .input-row input {
+    .input-shell {
       flex: 1;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: #f7f3ff;
+      position: relative;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 44px 12px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(204, 175, 255, 0.35);
+      background: radial-gradient(circle at top left, rgba(45, 19, 85, 0.74), rgba(7, 2, 23, 0.98));
+      color: var(--text-main);
       font-size: 13px;
-      padding: 8px 4px;
-      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+      outline: none;
+      box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, 0.7),
+        0 0 18px rgba(178, 133, 255, 0.3);
+      caret-color: var(--accent);
     }
 
-    .input-row input::placeholder {
-      color: rgba(158, 145, 220, 0.72);
+    input[type="text"]::placeholder {
+      color: var(--text-muted);
     }
 
-    .btn-check {
+    .prefix {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      letter-spacing: 0.19em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    button {
+      padding: 11px 18px;
+      border-radius: 999px;
       border: none;
       outline: none;
       cursor: pointer;
-      padding: 10px 26px;
-      border-radius: var(--radius-pill);
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #b76bff, #ff6ecf);
-      color: #0b041a;
+      background: radial-gradient(circle at 10% 0, #f8f5ff, #d8c4ff);
+      color: #140421;
       font-weight: 600;
-      box-shadow: var(--shadow-glow);
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.6),
+        0 10px 30px rgba(216, 176, 255, 0.8);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, background 0.12s ease-out;
       white-space: nowrap;
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
 
-    .btn-check:hover {
+    button:hover {
       transform: translateY(-1px);
-      box-shadow: 0 0 26px rgba(183, 107, 255, 0.8);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.8),
+        0 14px 40px rgba(226, 190, 255, 0.95);
+      background: radial-gradient(circle at 10% 0, #ffffff, #ebddff);
     }
 
-    .btn-check:active {
-      transform: translateY(1px);
-      box-shadow: 0 0 20px rgba(183, 107, 255, 0.5);
+    button:active {
+      transform: translateY(0);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.9),
+        0 6px 18px rgba(160, 110, 230, 0.9);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--text-muted);
     }
 
     .result {
       margin-top: 14px;
-      min-height: 22px;
+      border-radius: 15px;
+      padding: 10px 12px 11px;
+      background: radial-gradient(circle at 0 0, rgba(36, 255, 191, 0.06), transparent 70%), rgba(7, 1, 22, 0.94);
+      border: 1px solid rgba(178, 150, 255, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
       font-size: 13px;
+      line-height: 1.4;
     }
 
-    .result span.label {
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      font-size: 11px;
-      opacity: 0.9;
+    .result-icon {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #c7ffeb, #73ffa1);
+      box-shadow: 0 0 15px rgba(115, 255, 161, 0.95);
+      flex-shrink: 0;
     }
 
-    .result.ok {
-      color: var(--success);
+    .result-icon.error {
+      background: radial-gradient(circle, #ffb4d1, #ff4d8b);
+      box-shadow: 0 0 15px rgba(255, 90, 154, 1);
     }
 
-    .result.miss {
-      color: var(--text-sub);
+    .result-title {
+      font-weight: 600;
+      color: var(--text-main);
     }
 
-    .result.error {
-      color: var(--danger);
+    .result-detail {
+      color: var(--text-soft);
     }
 
-    /* RIGHT SIDE ART */
-    .art-wrapper {
+    /* RIGHT PANEL (ART) */
+
+    .art-wrap {
       position: relative;
-      min-height: 260px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .orb {
-      position: absolute;
-      inset: 10% -5% -15% 18%;
-      background:
-        radial-gradient(circle at top, rgba(250, 230, 255, 0.35), transparent 65%),
-        radial-gradient(circle at bottom right, rgba(255, 101, 210, 0.5), transparent 60%),
-        radial-gradient(circle at top left, rgba(158, 108, 255, 0.7), transparent 65%);
-      opacity: 0.55;
-      filter: blur(6px);
-      mix-blend-mode: screen;
-      animation: floatOrb 12s ease-in-out infinite;
-    }
-
-    .jungle-img {
-      position: absolute;
-      inset: 6% 0 4% 14%;
-      border-radius: 28px;
-      overflow: hidden;
-      border: 1px solid rgba(190, 160, 255, 0.7);
+    .art-card {
+      width: 100%;
+      max-width: 430px;
+      aspect-ratio: 4 / 3.4;
+      border-radius: 26px;
+      padding: 18px 18px 22px;
+      background: var(--card-bg);
+      border: 1px solid rgba(227, 205, 255, 0.35);
       box-shadow:
-        0 24px 80px rgba(0, 0, 0, 0.9),
-        0 0 60px rgba(131, 86, 255, 0.7);
-      background: #090417;
+        0 24px 68px rgba(0, 0, 0, 0.85),
+        0 0 40px rgba(182, 137, 255, 0.42);
+      overflow: hidden;
+      position: relative;
+      animation: artFloat 13s ease-in-out infinite alternate;
     }
 
-    .jungle-img img {
+    @keyframes artFloat {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      100% {
+        transform: translate3d(0, -6px, 0) scale(1.01);
+      }
+    }
+
+    .art-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
+    .bg-img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       transform: scale(1.04);
+      filter: saturate(1.18) contrast(1.05);
     }
 
     .character-img {
       position: absolute;
-      bottom: -2%;
-      left: 10%;         /* move in from the edge */
-      width: 48%;        /* a bit smaller for balance */
-      max-width: 260px;
-      filter: drop-shadow(0 26px 50px rgba(0, 0, 0, 0.95))
-              drop-shadow(0 0 32px rgba(211, 144, 255, 0.72));
-      animation: floatErebus 6.5s ease-in-out infinite;
-    }
-
-    .character-img img {
-      width: 100%;
+      left: 21%;
+      bottom: 4%;
+      width: 29%;
       height: auto;
-      display: block;
+      object-fit: contain;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.85));
+      animation:
+        erebusFloat 7.5s ease-in-out infinite alternate,
+        erebusGlow 5.8s ease-in-out infinite alternate;
     }
 
-    .art-tag {
-      position: absolute;
-      top: 8%;
-      right: 12%;
-      padding: 8px 22px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(255, 255, 255, 0.65);
-      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.3), transparent 60%)
-                  rgba(14, 3, 40, 0.9);
-      font-size: 10px;
-      letter-spacing: 0.23em;
-      text-transform: uppercase;
-      color: #ffffff; /* bright text */
-      text-shadow:
-        0 0 12px rgba(255, 255, 255, 0.85),
-        0 0 22px rgba(191, 135, 255, 0.7);
-      box-shadow: 0 0 24px rgba(191, 135, 255, 0.9);
-      white-space: nowrap;
-      animation: floatTag 7.5s ease-in-out infinite;
+    @keyframes erebusFloat {
+      0% {
+        transform: translate3d(-4px, 3px, 0) scale(1);
+      }
+      100% {
+        transform: translate3d(4px, -6px, 0) scale(1.02);
+      }
     }
+
+    @keyframes erebusGlow {
+      0% {
+        filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.95));
+      }
+      100% {
+        filter: drop-shadow(0 0 18px rgba(47, 9, 100, 0.95));
+      }
+    }
+
+    .art-pill {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 7px 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.12), transparent 60%), var(--pill-bg);
+      border: 1px solid rgba(247, 235, 255, 0.55);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 0 40px rgba(199, 159, 255, 0.75);
+      color: #fbf6ff;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .frame-glow {
+      position: absolute;
+      inset: -30%;
+      background: radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.12), transparent 60%);
+      mix-blend-mode: screen;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .frame-mask {
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 55px rgba(0, 0, 0, 0.9);
+      border-radius: 22px;
+      pointer-events: none;
+    }
+
+    /* RESPONSIVE */
 
     @media (max-width: 900px) {
-      .art-wrapper {
-        min-height: 220px;
-      }
-
-      .art-tag {
-        right: 10%;
-      }
-    }
-
-    @media (max-width: 700px) {
       body {
-        padding: 16px 10px;
+        padding: 16px;
       }
 
       .shell {
-        border-radius: 22px;
+        padding: 22px 18px 24px;
       }
 
-      .top-row {
+      .content-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+      }
+
+      .art-card {
+        max-width: 460px;
+        margin-inline: auto;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .input-wrap {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
-        margin-bottom: 24px;
+        align-items: stretch;
       }
 
-      .checker-card {
-        margin-top: 26px;
+      button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
       }
 
-      .art-tag {
-        top: 6%;
-        right: 8%;
-      }
-    }
-
-    /* ANIMATIONS */
-
-    @keyframes floatErebus {
-      0%   { transform: translate3d(0, 0, 0); }
-      50%  { transform: translate3d(0, -10px, 0); }
-      100% { transform: translate3d(0, 0, 0); }
-    }
-
-    @keyframes floatOrb {
-      0%   { transform: translate3d(0, 0, 0) scale(1); opacity: 0.5; }
-      50%  { transform: translate3d(0, -8px, 0) scale(1.03); opacity: 0.7; }
-      100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.5; }
-    }
-
-    @keyframes floatTag {
-      0%   { transform: translate3d(0, 0, 0); }
-      50%  { transform: translate3d(0, -5px, 0); }
-      100% { transform: translate3d(0, 0, 0); }
-    }
-
-    @keyframes shellGlow {
-      0% {
-        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.9),
-                    0 0 20px rgba(149, 88, 255, 0.25);
-      }
-      50% {
-        box-shadow: 0 40px 130px rgba(0, 0, 0, 0.95),
-                    0 0 40px rgba(183, 107, 255, 0.6);
-      }
-      100% {
-        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.9),
-                    0 0 20px rgba(149, 88, 255, 0.25);
+      .brand-title {
+        font-size: 13px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <div class="content">
-      <!-- LEFT SIDE: TEXT + CHECKER -->
-      <div>
-        <div class="top-row">
-          <div class="brand">
-            <div class="brand-logo">
-              <img src="erebus-logo.png" alt="Erebus logo">
-            </div>
-            <div>
-              <div class="brand-text-main">EREBUS</div>
-              <div class="brand-text-sub">ID PASS · WL CHECKER</div>
-            </div>
-          </div>
+  <!-- animated glows -->
+  <div class="glow-orb"></div>
+  <div class="glow-orb"></div>
+  <div class="glow-orb"></div>
 
-          <div class="tag-pill">MONAD · SNAPSHOT</div>
+  <main class="shell">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">
+          <!-- local Erebus logo -->
+          <img src="./erebus-logo.png" alt="Erebus logo" />
         </div>
-
         <div>
-          <div class="section-label">WL CHECKER</div>
-          <h1>Check if a wallet has Free mint WL</h1>
-          <p class="lead">
-            Paste any EVM wallet. The checker reads the official
-            <strong>Erebus: ID Pass</strong> snapshot and tells you how many
-            <strong>Free Mint WL mints</strong> that wallet holds.
-          </p>
+          <div class="brand-text-main">Erebus</div>
+          <div class="brand-title">ID Pass · WL Checker</div>
         </div>
+      </div>
+
+      <div class="pill">
+        <span class="pill-dot"></span>
+        <span>FREE MINT WL · SNAPSHOT</span>
+      </div>
+    </header>
+
+    <section class="content-row">
+      <!-- LEFT: copy + checker -->
+      <div class="text-block">
+        <div class="eyebrow">WL Checker</div>
+        <h1>Check if a wallet has Free mint WL</h1>
+        <p class="subtitle">
+          Paste any EVM wallet. The checker reads the official Erebus: ID Pass snapshot and
+          tells you how many <strong>Free Mint WL mints</strong> that wallet holds.
+        </p>
 
         <div class="checker-card">
-          <div class="field-label">Wallet address</div>
-          <div class="field-help">
-            Checker is <strong>snapshot-based</strong>. No on-chain calls. No draws. Just WL eligibility.
+          <div class="checker-label-row">
+            <div class="checker-label">Wallet address</div>
+            <div class="checker-meta">Snapshot-based · No draws</div>
           </div>
 
-          <form id="checker-form" class="input-row">
-            <input
-              id="wallet-input"
-              type="text"
-              autocomplete="off"
-              spellcheck="false"
-              placeholder="0x1234… Paste EVM wallet address"
-            />
-            <button type="submit" class="btn-check">Check</button>
-          </form>
+          <div class="input-wrap">
+            <div class="input-shell">
+              <input
+                id="walletInput"
+                type="text"
+                placeholder="0x…"
+                autocomplete="off"
+              />
+              <span class="prefix">EVM</span>
+            </div>
+            <button id="checkBtn">Check</button>
+          </div>
 
-          <div id="result" class="result"></div>
+          <div class="hint">
+            Checker uses the static snapshot file <strong>snapshot.txt</strong>.  
+            Addresses without a number count as <strong>1 Free Mint WL</strong>.
+          </div>
+
+          <div class="result" id="resultBox">
+            <div class="result-icon" id="resultIcon"></div>
+            <div>
+              <div class="result-title" id="resultTitle">Waiting for input…</div>
+              <div class="result-detail" id="resultDetail">
+                Paste a wallet and hit <strong>Check</strong> or press <strong>Enter</strong>.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- RIGHT SIDE: EREBUS ART -->
-      <div class="art-wrapper" aria-hidden="true">
-        <div class="orb"></div>
-
-        <div class="jungle-img">
-          <img src="erebus-jungle.png" alt="Erebus jungle background">
+      <!-- RIGHT: pixel art card -->
+      <div class="art-wrap">
+        <div class="art-card">
+          <div class="art-inner">
+            <img src="./erebus-jungle.png" alt="Erebus jungle" class="bg-img" />
+            <img src="./erebus-character.png" alt="Erebus" class="character-img" />
+            <div class="art-pill">Free Mint WL · Snapshot</div>
+            <div class="frame-glow"></div>
+            <div class="frame-mask"></div>
+          </div>
         </div>
-
-        <div class="character-img">
-          <img src="erebus-character.png" alt="Erebus creature">
-        </div>
-
-        <div class="art-tag">FREE MINT WL · SNAPSHOT</div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script>
-    // Simple EVM address check (0x + 40 hex chars)
-    function isValidAddress(address) {
-      return /^0x[a-fA-F0-9]{40}$/.test(address);
+    // Map<lowercaseAddress, countOfMints>
+    const snapshotMap = new Map();
+    let snapshotLoaded = false;
+    let snapshotError = false;
+
+    function normaliseAddress(addr) {
+      if (!addr) return "";
+      return addr.trim().toLowerCase();
     }
 
-    // Map of addressLower -> freeMintCount
-    const snapshotMap = new Map();
+    function isEvmAddress(addr) {
+      return /^0x[a-fA-F0-9]{40}$/.test(addr.trim());
+    }
 
     async function loadSnapshot() {
       try {
-        const res = await fetch("snapshot.txt?" + Date.now());
-        if (!res.ok) {
-          console.error("Failed to load snapshot.txt");
-          return;
-        }
+        const res = await fetch("./snapshot.txt", { cache: "no-store" });
+        if (!res.ok) throw new Error("Snapshot fetch failed");
         const text = await res.text();
 
         const lines = text.split(/\r?\n/);
-        for (let line of lines) {
-          line = line.trim();
-          if (!line) continue;
+        for (let raw of lines) {
+          const line = raw.trim();
+          if (!line || line.startsWith("#")) continue;
 
+          // split by any whitespace
           const parts = line.split(/\s+/);
-          const rawAddress = parts[0];
-          if (!/^0x[a-fA-F0-9]{40}$/.test(rawAddress)) continue;
+          if (!parts[0]) continue;
 
-          const addrLower = rawAddress.toLowerCase();
+          const addr = normaliseAddress(parts[0]);
+          if (!isEvmAddress(addr)) continue;
+
           let count = 1;
-
           if (parts.length > 1) {
-            const num = parseInt(parts[1], 10);
-            if (!Number.isNaN(num) && num > 0) {
-              count = num;
+            const maybeNumber = parseInt(parts[1].replace(/[^\d]/g, ""), 10);
+            if (!isNaN(maybeNumber) && maybeNumber > 0) {
+              count = maybeNumber;
             }
           }
 
-          // Remove duplicates by aggregating counts
-          const existing = snapshotMap.get(addrLower) || 0;
-          snapshotMap.set(addrLower, existing + count);
+          // combine duplicates
+          const prev = snapshotMap.get(addr) || 0;
+          snapshotMap.set(addr, prev + count);
         }
 
-        console.log("Snapshot loaded. Addresses:", snapshotMap.size);
+        snapshotLoaded = true;
       } catch (err) {
         console.error("Error loading snapshot:", err);
+        snapshotError = true;
       }
     }
 
-    loadSnapshot();
+    function updateResult({ ok, title, detail }) {
+      const box = document.getElementById("resultBox");
+      const icon = document.getElementById("resultIcon");
+      const titleEl = document.getElementById("resultTitle");
+      const detailEl = document.getElementById("resultDetail");
 
-    const form = document.getElementById("checker-form");
-    const input = document.getElementById("wallet-input");
-    const resultBox = document.getElementById("result");
+      titleEl.textContent = title;
+      detailEl.innerHTML = detail;
 
-    function setResult(message, type) {
-      resultBox.className = "result " + (type || "");
-      resultBox.innerHTML = message;
-    }
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const rawValue = (input.value || "").trim();
-
-      if (!rawValue) {
-        setResult('<span class="label">Error</span> · Paste a wallet address first.', "error");
-        return;
-      }
-
-      if (!isValidAddress(rawValue)) {
-        setResult(
-          '<span class="label">Invalid address</span> · Please enter a valid EVM wallet (0x + 40 hex characters).',
-          "error"
-        );
-        return;
-      }
-
-      const key = rawValue.toLowerCase();
-      const count = snapshotMap.get(key) || 0;
-
-      if (count > 0) {
-        const mintText = count === 1 ? "mint" : "mints";
-        setResult(
-          `<span class="label">Free mint WL</span> · This wallet has <strong>${count}</strong> Free Mint WL ${mintText}.`,
-          "ok"
-        );
+      if (ok === true) {
+        icon.classList.remove("error");
+        box.style.borderColor = "rgba(115,255,161,0.65)";
+      } else if (ok === false) {
+        icon.classList.add("error");
+        box.style.borderColor = "rgba(255,90,154,0.85)";
       } else {
-        setResult(
-          '<span class="label">No WL found</span> · This wallet is not in the Erebus: ID Pass snapshot. 0 Free Mint WL mints.',
-          "miss"
-        );
+        icon.classList.remove("error");
+        box.style.borderColor = "rgba(178,150,255,0.4)";
+      }
+    }
+
+    function handleCheck() {
+      const inputEl = document.getElementById("walletInput");
+      const addrRaw = inputEl.value;
+      const addr = normaliseAddress(addrRaw);
+
+      if (snapshotError) {
+        updateResult({
+          ok: false,
+          title: "Snapshot error",
+          detail: "Could not load <strong>snapshot.txt</strong>. Please refresh or contact the team."
+        });
+        return;
+      }
+
+      if (!snapshotLoaded) {
+        updateResult({
+          ok: null,
+          title: "Snapshot still loading…",
+          detail: "Give it a second and try again. If this persists, refresh the page."
+        });
+        return;
+      }
+
+      if (!addr) {
+        updateResult({
+          ok: null,
+          title: "Waiting for input…",
+          detail: "Paste a wallet and hit <strong>Check</strong> or press <strong>Enter</strong>."
+        });
+        return;
+      }
+
+      if (!isEvmAddress(addr)) {
+        updateResult({
+          ok: false,
+          title: "Invalid address",
+          detail: "Please paste a valid <strong>EVM</strong> wallet address (0x… with 40 hex characters)."
+        });
+        return;
+      }
+
+      const mints = snapshotMap.get(addr) || 0;
+      if (mints > 0) {
+        const plural = mints === 1 ? "mint" : "mints";
+        updateResult({
+          ok: true,
+          title: "✅ Eligible · Free Mint WL",
+          detail: `This wallet has <strong>${mints} Free Mint WL ${plural}</strong> from the Erebus: ID Pass snapshot.`
+        });
+      } else {
+        updateResult({
+          ok: false,
+          title: "❌ No Free Mint WL",
+          detail: "This wallet is not in the Erebus: ID Pass snapshot. No Free Mint WL mints detected."
+        });
+      }
+    }
+
+    document.getElementById("checkBtn").addEventListener("click", handleCheck);
+
+    document.getElementById("walletInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleCheck();
       }
     });
+
+    loadSnapshot();
   </script>
 </body>
 </html>
