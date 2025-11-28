@@ -17,7 +17,7 @@
       --success: #7cf2c4;
       --border-subtle: rgba(255, 255, 255, 0.06);
       --pill-bg: rgba(12, 4, 32, 0.9);
-      --monad-purple: #d9b3ff; /* NEW: visible purple */
+      --monad-purple: #d9b3ff;
     }
 
     * {
@@ -52,6 +52,21 @@
       opacity: 0.8;
       mix-blend-mode: screen;
       z-index: -2;
+    }
+
+    @keyframes floatFrame {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-6px); }
+    }
+
+    @keyframes driftGlow {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-40px, 20px, 0); }
+    }
+
+    @keyframes floatInner {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
     }
 
     .outer-frame {
@@ -117,7 +132,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 6px 14px 6px 6px;
+      padding: 6px 16px 6px 6px;
       border-radius: 999px;
       background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), rgba(18, 7, 39, 0.9));
       box-shadow:
@@ -126,9 +141,10 @@
       backdrop-filter: blur(12px);
     }
 
+    /* Enlarged Erebus logo */
     .logo-pill-icon {
-      width: 30px;
-      height: 30px;
+      width: 40px;   /* was 30 */
+      height: 40px;  /* was 30 */
       border-radius: 999px;
       background: radial-gradient(circle at 25% 15%, #fdfbff, #c084ff);
       display: flex;
@@ -140,6 +156,12 @@
       box-shadow:
         0 0 0 2px rgba(16, 0, 32, 0.8),
         0 0 22px rgba(197, 148, 255, 0.65);
+    }
+
+    .logo-pill-icon img {
+      width: 32px;   /* was 22 */
+      height: 32px;  /* was 22 */
+      border-radius: 999px;
     }
 
     .logo-pill-text {
@@ -162,7 +184,6 @@
       color: rgba(214, 198, 255, 0.6);
     }
 
-    /* ★ MONAD badge now purple & visible */
     .network-pill {
       padding: 6px 14px;
       border-radius: 999px;
@@ -178,13 +199,7 @@
         0 0 32px rgba(162, 92, 255, 0.45);
     }
 
-    .top-meta {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(224, 208, 255, 0.78);
-      margin-bottom: 10px;
-    }
+    /* Removed old .top-meta usage */
 
     h1 {
       font-size: 28px;
@@ -231,8 +246,6 @@
       letter-spacing: 0.18em;
       color: rgba(231, 220, 255, 0.8);
     }
-
-    /* ★ REMOVED the text here as requested */
 
     .input-row {
       display: flex;
@@ -363,6 +376,14 @@
       100% { transform: translateY(-4px) scale(1.02); }
     }
 
+    @media (max-width: 840px) {
+      .inner-card {
+        flex-direction: column-reverse;
+      }
+      .right-panel {
+        order: -1;
+      }
+    }
   </style>
 </head>
 
@@ -376,7 +397,7 @@
           <div class="header-row">
             <div class="logo-pill">
               <div class="logo-pill-icon">
-                <img src="erebus-logo.png" alt="Erebus" style="width:22px;height:22px;border-radius:999px;" />
+                <img src="erebus-logo.png" alt="Erebus" />
               </div>
               <div class="logo-pill-text">
                 <span class="logo-pill-title">Erebus ID Pass</span>
@@ -384,12 +405,11 @@
               </div>
             </div>
 
-            <!-- ★ Purple MONAD badge -->
             <div class="network-pill">MONAD</div>
           </div>
 
-          <div class="top-meta">WL Checker</div>
-          <h1>Check if a wallet has Free mint WL</h1>
+          <!-- Replaced both old texts with a single 'WL Checker' -->
+          <h1>WL Checker</h1>
 
           <p class="lead">
             Paste any EVM wallet. The checker reads the official
@@ -402,8 +422,6 @@
               <span>Wallet address</span>
               <span>Snapshot-based only</span>
             </div>
-
-            <!-- ★ REMOVED THE ENTIRE LONG TEXT HERE -->
 
             <div class="input-row">
               <div class="input-wrapper">
