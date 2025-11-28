@@ -2,730 +2,225 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Erebus: ID Pass – Free Mint WL Checker</title>
+  <title>Erebus Snapshot Checker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- FONTS -->
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
-
   <style>
-    :root {
-      --erebus-purple: #8c4bff;
-      --erebus-deep: #0b0215;
-      --erebus-neon: #3ff0ff;
-      --erebus-pink: #ff5bd6;
-      --erebus-glow-soft: 0 0 30px rgba(140, 75, 255, 0.7);
-      --erebus-radius: 22px;
-    }
-
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      min-height: 100vh;
-      overflow-x: hidden;
-      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: #f6eaff;
-      background-color: #02000a;
-      position: relative;
-    }
-
-    /* BACKGROUND JUNGLE */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at 20% 0%, rgba(255, 91, 214, 0.7), transparent 55%),
-        radial-gradient(circle at 80% 100%, rgba(63, 240, 255, 0.5), transparent 55%),
-        rgba(0, 0, 0, 0.85);
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .jungle-layer {
-      position: fixed;
-      inset: 0;
-      background-image: url("erebus-jungle.png"); /* put your jungle / forest pixel art here */
-      background-size: cover;
-      background-position: center;
-      filter: saturate(1.2) contrast(1.05) brightness(0.65);
-      opacity: 0.55;
-      z-index: -3;
-    }
-
-    .noise-layer {
-      position: fixed;
-      inset: 0;
-      background-image: linear-gradient(
-        rgba(255, 255, 255, 0.03) 1px,
-        transparent 1px
-      );
-      background-size: 100% 2px;
-      mix-blend-mode: overlay;
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: -2;
-    }
-
-    main {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #05030a;
+      color: #f5f5f5;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 40px 16px;
+      align-items: flex-start;
+      min-height: 100vh;
     }
 
-    .checker-shell {
+    .wrapper {
       width: 100%;
-      max-width: 960px;
-      border-radius: var(--erebus-radius);
-      border: 1px solid rgba(148, 95, 255, 0.7);
-      background: radial-gradient(circle at top, rgba(23, 8, 69, 0.9), rgba(5, 2, 16, 0.98));
-      box-shadow:
-        0 0 0 1px rgba(25, 8, 70, 0.85),
-        0 0 35px rgba(92, 39, 211, 0.7),
-        0 0 120px rgba(23, 192, 255, 0.4);
-      padding: 26px 26px 22px;
-      position: relative;
-      overflow: hidden;
+      max-width: 540px;
+      padding: 24px 16px 48px;
     }
 
-    .checker-shell::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        conic-gradient(
-          from 120deg,
-          rgba(63, 240, 255, 0.07),
-          rgba(255, 91, 214, 0.12),
-          rgba(140, 75, 255, 0.18),
-          rgba(63, 240, 255, 0.07)
-        );
-      opacity: 0.8;
-      mix-blend-mode: screen;
-      filter: blur(24px);
-      animation: aura-spin 40s linear infinite;
-      z-index: -1;
+    .card {
+      background: radial-gradient(circle at top, #3d1b5a 0%, #0b0613 45%, #05030a 100%);
+      border-radius: 18px;
+      padding: 24px 20px 28px;
+      box-shadow: 0 0 40px rgba(129, 52, 255, 0.35);
+      border: 1px solid rgba(180, 120, 255, 0.35);
     }
 
-    @keyframes aura-spin {
-      from { transform: rotate(0deg);}
-      to   { transform: rotate(360deg);}
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      margin-bottom: 18px;
-    }
-
-    .logo-circle {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 20% 0%, #ff8df5, #5b2db3, #050013);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--erebus-glow-soft);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .logo-circle img {
-      max-width: 78%;
-      max-height: 78%;
-      display: block;
-      filter: drop-shadow(0 0 12px rgba(63, 240, 255, 0.9));
-    }
-
-    .erebus-title-block {
-      flex: 1;
-    }
-
-    .erebus-title {
-      font-family: "Unbounded", system-ui;
-      font-size: 1.7rem;
-      letter-spacing: 0.14em;
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 8px;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      text-shadow:
-        0 0 12px rgba(0, 0, 0, 0.75),
-        0 0 22px rgba(140, 75, 255, 0.8);
     }
 
-    .erebus-sub {
-      margin-top: 2px;
-      font-size: 0.88rem;
-      color: #d9cfff;
-      opacity: 0.85;
-    }
-
-    .launch-pill {
-      font-size: 0.74rem;
-      border-radius: 999px;
-      padding: 6px 12px;
-      text-transform: uppercase;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: radial-gradient(circle at 0 0, rgba(255, 91, 214, 0.3), transparent 60%);
-      box-shadow: 0 0 16px rgba(153, 102, 255, 0.7);
-      white-space: nowrap;
-    }
-
-    .launch-pill span {
-      color: #ffdfff;
-      font-weight: 600;
-    }
-
-    .content-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2.8fr);
-      gap: 22px;
-      align-items: stretch;
-    }
-
-    @media (max-width: 780px) {
-      .checker-shell {
-        padding: 22px 18px 20px;
-      }
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .content-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .panel {
-      border-radius: calc(var(--erebus-radius) - 8px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: radial-gradient(circle at 0 0, rgba(63, 240, 255, 0.14), transparent 55%), rgba(6, 2, 20, 0.92);
-      box-shadow: 0 0 24px rgba(5, 0, 25, 0.85);
-      padding: 18px 17px 17px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.22), transparent 60%);
-      mix-blend-mode: soft-light;
-      opacity: 0.25;
-      z-index: -1;
-    }
-
-    .panel h2 {
-      font-family: "Unbounded", system-ui;
-      font-size: 1.1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-bottom: 10px;
-      color: #fdf2ff;
-    }
-
-    .panel p {
+    .subtitle {
       font-size: 0.9rem;
-      line-height: 1.5;
-      color: #dbcfff;
-      opacity: 0.95;
+      color: #c8b6ff;
+      opacity: 0.9;
+      margin-bottom: 20px;
     }
 
-    .panel p strong {
-      color: #ffffff;
-    }
-
-    .erebus-x-link {
-      margin-top: 10px;
-      font-size: 0.86rem;
-    }
-
-    .erebus-x-link a {
-      color: var(--erebus-neon);
-      text-decoration: none;
-      border-bottom: 1px dotted rgba(63, 240, 255, 0.8);
-    }
-
-    .erebus-x-link a:hover {
-      text-shadow: 0 0 10px rgba(63, 240, 255, 0.9);
-    }
-
-    .form-block {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .input-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    @media (max-width: 640px) {
-      .input-row {
-        flex-direction: column;
-      }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      color: #e6dbff;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
     }
 
     input[type="text"] {
-      flex: 1;
-      border-radius: 999px;
-      border: 1px solid rgba(145, 114, 255, 0.85);
-      padding: 11px 16px;
-      background: radial-gradient(circle at 0 0, rgba(63, 240, 255, 0.15), transparent 55%), #050012;
-      color: #fef6ff;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(180, 120, 255, 0.6);
+      background: rgba(7, 4, 18, 0.9);
+      color: #f5f5f5;
+      font-size: 0.95rem;
       outline: none;
-      font-size: 0.9rem;
-      box-shadow: 0 0 18px rgba(32, 4, 91, 0.8);
-      caret-color: var(--erebus-neon);
     }
 
     input[type="text"]::placeholder {
-      color: #9d90d5;
+      color: #8a7bb8;
     }
 
     input[type="text"]:focus {
-      border-color: #ff9df0;
-      box-shadow:
-        0 0 16px rgba(255, 157, 240, 0.7),
-        0 0 36px rgba(63, 240, 255, 0.4);
+      border-color: #f8c35b;
+      box-shadow: 0 0 0 1px rgba(248, 195, 91, 0.4);
     }
 
-    button.check-btn {
+    .btn-row {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px 14px;
       border-radius: 999px;
       border: none;
-      padding: 11px 22px;
-      font-family: "Unbounded", system-ui;
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      background-image: linear-gradient(135deg, #ff5bd6, #8c4bff, #3ff0ff);
-      color: #05000c;
       cursor: pointer;
-      box-shadow:
-        0 0 16px rgba(255, 91, 214, 0.9),
-        0 0 40px rgba(63, 240, 255, 0.7);
-      position: relative;
-      overflow: hidden;
-    }
-
-    button.check-btn span {
-      position: relative;
-      z-index: 1;
-    }
-
-    button.check-btn::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.4), transparent 55%);
-      opacity: 0;
-      transition: opacity 0.25s ease-out, transform 0.25s ease-out;
-      transform: translate3d(-10%, -10%, 0);
-    }
-
-    button.check-btn:hover::before {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-
-    button.check-btn:active {
-      transform: translateY(1px) scale(0.99);
-      box-shadow:
-        0 0 10px rgba(255, 91, 214, 0.7),
-        0 0 26px rgba(63, 240, 255, 0.6);
-    }
-
-    .hint-line {
-      font-size: 0.78rem;
-      color: #c9baf8;
-      opacity: 0.9;
-    }
-
-    .results-box {
-      margin-top: 10px;
-      border-radius: 16px;
-      padding: 12px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: linear-gradient(135deg, rgba(6, 0, 27, 0.9), rgba(19, 0, 54, 0.9));
-      min-height: 52px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 0.9rem;
-    }
-
-    .result-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 0.76rem;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      border: 1px solid rgba(63, 240, 255, 0.7);
-      background: radial-gradient(circle at 0 0, rgba(63, 240, 255, 0.24), transparent 60%);
-      color: #dbfaff;
-      margin-bottom: 5px;
-    }
-
-    .result-pill.bad {
-      border-color: rgba(255, 143, 188, 0.8);
-      background: radial-gradient(circle at 0 0, rgba(255, 91, 214, 0.3), transparent 60%);
-      color: #ffeaf3;
-    }
-
-    .result-pill span {
       font-weight: 600;
-    }
-
-    .result-main-text {
-      color: #efe5ff;
-    }
-
-    .result-extra {
-      font-size: 0.78rem;
-      color: #baa9ff;
-    }
-
-    /* SIDE PANEL: EREBUS CREATURE + NOTES */
-    .creature-panel {
-      display: grid;
-      grid-template-rows: auto 1fr;
-      gap: 12px;
-    }
-
-    .creature-silhouette {
-      position: relative;
-      border-radius: 18px;
-      border: 1px solid rgba(112, 88, 255, 0.9);
-      background:
-        radial-gradient(circle at 0 0, rgba(63, 240, 255, 0.18), transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(255, 91, 214, 0.25), transparent 60%),
-        rgba(2, 0, 8, 0.92);
-      box-shadow:
-        0 0 22px rgba(158, 120, 255, 0.9),
-        0 0 80px rgba(23, 0, 93, 0.9);
-      padding: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .creature-silhouette img {
-      max-width: 82%;
-      filter:
-        drop-shadow(0 0 18px rgba(8, 0, 51, 1))
-        drop-shadow(0 0 28px rgba(63, 240, 255, 0.8));
-      transform: translateY(0);
-      animation: float-creature 7s ease-in-out infinite;
-    }
-
-    @keyframes float-creature {
-      0%, 100% { transform: translateY(3px); }
-      50% { transform: translateY(-6px); }
-    }
-
-    .creature-copy {
-      font-size: 0.84rem;
-      line-height: 1.5;
-      color: #e5dbff;
-    }
-
-    .creature-copy strong {
-      color: #ffffff;
-    }
-
-    .creature-copy span.accent {
-      color: var(--erebus-neon);
-    }
-
-    /* FLOATING QUOTES */
-    .floating-quotes {
-      pointer-events: none;
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      z-index: 0;
-      opacity: 0.85;
-    }
-
-    .quote {
-      position: absolute;
-      font-family: "Unbounded", system-ui;
-      font-size: 0.68rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: rgba(212, 195, 255, 0.8);
-      text-shadow:
-        0 0 12px rgba(63, 240, 255, 0.6),
-        0 0 20px rgba(0, 0, 0, 0.9);
-      animation: drift-quote 38s linear infinite;
-      white-space: nowrap;
+      transition: transform 0.08s ease, box-shadow 0.08s ease,
+        background 0.15s ease;
     }
 
-    @keyframes drift-quote {
-      0%   { transform: translate3d(0, 120%, 0); opacity: 0; }
-      10%  { opacity: 1; }
-      80%  { opacity: 1; }
-      100% { transform: translate3d(0, -140%, 0); opacity: 0; }
+    .btn-primary {
+      background: linear-gradient(135deg, #f8c35b, #f58f3a);
+      color: #1a0f2e;
+      box-shadow: 0 0 18px rgba(245, 143, 58, 0.5);
     }
 
-    /* PORTAL OVERLAY */
-    .portal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      pointer-events: none;
-      opacity: 0;
-      transform: scale(0.6);
-      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 26px rgba(245, 143, 58, 0.7);
     }
 
-    .portal-overlay.active {
-      opacity: 1;
-      transform: scale(1);
+    .btn-secondary {
+      max-width: 120px;
+      background: rgba(20, 14, 40, 0.9);
+      color: #d1c1ff;
+      border: 1px solid rgba(150, 115, 255, 0.5);
     }
 
-    .portal-core {
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 50% 50%, #e0c7ff 0%, #ae7eff 15%, #5f23e0 40%, #1b042d 60%, transparent 70%);
-      box-shadow:
-        0 0 60px rgba(140, 75, 255, 0.9),
-        0 0 120px rgba(63, 240, 255, 0.7),
-        0 0 260px rgba(0, 0, 0, 1);
-      position: relative;
-      overflow: hidden;
-      animation: portal-pulse 1.4s ease-out forwards;
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 16px rgba(150, 115, 255, 0.5);
     }
 
-    .portal-wave {
-      position: absolute;
-      inset: -30%;
-      background:
-        conic-gradient(
-          from 0deg,
-          rgba(255, 255, 255, 0.1),
-          rgba(63, 240, 255, 0.45),
-          rgba(255, 91, 214, 0.4),
-          rgba(140, 75, 255, 0.5),
-          rgba(63, 240, 255, 0.45),
-          rgba(255, 255, 255, 0.1)
-        );
-      mix-blend-mode: screen;
-      animation: portal-spin 1.4s linear infinite;
+    .result {
+      margin-top: 18px;
+      padding: 12px 12px 12px;
+      border-radius: 12px;
+      background: rgba(10, 6, 24, 0.95);
+      border: 1px solid rgba(120, 90, 210, 0.6);
+      font-size: 0.95rem;
+      display: none;
+    }
+
+    .result strong {
+      color: #f8c35b;
+    }
+
+    .result.error {
+      border-color: #ff4e74;
+      color: #ffb3c4;
+    }
+
+    .meta {
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: #9f8fdd;
       opacity: 0.9;
     }
 
-    .portal-ring {
-      position: absolute;
-      inset: 20%;
-      border-radius: 50%;
-      border: 2px dashed rgba(255, 255, 255, 0.8);
-      box-shadow:
-        0 0 40px rgba(255, 255, 255, 0.7),
-        0 0 80px rgba(63, 240, 255, 0.9);
-      animation: portal-ring 1.4s ease-out infinite;
+    .meta span {
+      display: inline-block;
+      margin-right: 10px;
     }
 
-    @keyframes portal-spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
+    .footer-note {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: #7f72b8;
     }
 
-    @keyframes portal-pulse {
-      0%   { transform: scale(0.3); opacity: 0; }
-      20%  { opacity: 1; }
-      60%  { transform: scale(1.05); }
-      100% { transform: scale(1.2); opacity: 0; }
-    }
+    @media (min-width: 640px) {
+      .card {
+        padding: 28px 24px 32px;
+      }
 
-    @keyframes portal-ring {
-      0%   { transform: scale(0.7); opacity: 0; }
-      40%  { transform: scale(1); opacity: 1; }
-      100% { transform: scale(1.35); opacity: 0; }
-    }
-
-    footer {
-      margin-top: 14px;
-      font-size: 0.72rem;
-      opacity: 0.7;
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    footer span {
-      white-space: nowrap;
+      h1 {
+        font-size: 1.7rem;
+      }
     }
   </style>
 </head>
-
 <body>
-  <!-- Background layers -->
-  <div class="jungle-layer"></div>
-  <div class="noise-layer"></div>
-  <div class="floating-quotes" id="floatingQuotes"></div>
+  <div class="wrapper">
+    <div class="card">
+      <h1>Erebus Snapshot Checker</h1>
+      <div class="subtitle">
+        Enter your wallet address to see how many Erebus tokens/NFTs you have in this snapshot.
+      </div>
 
-  <!-- Portal overlay -->
-  <div class="portal-overlay" id="portalOverlay">
-    <div class="portal-core">
-      <div class="portal-wave"></div>
-      <div class="portal-ring"></div>
+      <label for="wallet">Wallet address</label>
+      <input
+        type="text"
+        id="wallet"
+        placeholder="0xYourAddressHere..."
+        autocomplete="off"
+      />
+
+      <div class="btn-row">
+        <button class="btn-primary" id="checkBtn">Check balance</button>
+        <button class="btn-secondary" id="clearBtn" type="button">
+          Clear
+        </button>
+      </div>
+
+      <div id="result" class="result"></div>
+
+      <div class="meta" id="meta">
+        <span id="holdersCount"></span>
+        <span id="totalAmount"></span>
+      </div>
+
+      <div class="footer-note">
+        Snapshot is static – if you bought after it was taken, it won't show here.
+      </div>
     </div>
   </div>
 
-  <main>
-    <section class="checker-shell">
-      <header>
-        <div class="logo-circle">
-          <!-- Put your Erebus logo image here -->
-          <img src="erebus-logo.png" alt="Erebus Logo">
-        </div>
-        <div class="erebus-title-block">
-          <div class="erebus-title">Erebus: ID Pass</div>
-          <div class="erebus-sub">
-            Free Mint Whitelist Checker for the Erebus Mainnet Launch
-          </div>
-        </div>
-        <div class="launch-pill">
-          Launch<br><span>29 November</span>
-        </div>
-      </header>
-
-      <div class="content-grid">
-        <!-- LEFT: CHECKER -->
-        <div class="panel">
-          <h2>Check your wallet</h2>
-          <p>
-            Enter any wallet address on Monad Testnet.  
-            If it holds at least <strong>one Erebus: ID Pass</strong>, it becomes a
-            <strong>Free Mint WL</strong> and you’ll see exactly how many free mints
-            you are eligible to claim.
-          </p>
-
-          <div class="erebus-x-link">
-            Follow the shadows on X:
-            <a href="https://x.com/ErebusNFT" target="_blank" rel="noopener noreferrer">@ErebusNFT</a>
-          </div>
-
-          <div class="form-block">
-            <div class="input-row">
-              <input
-                type="text"
-                id="walletInput"
-                placeholder="0x... Paste your wallet address here"
-              />
-              <button class="check-btn" id="checkBtn">
-                <span>Check wallet</span>
-              </button>
-            </div>
-            <div class="hint-line">
-              • Addresses are checked against the Erebus: ID Pass snapshot list  
-              • If an address has no number next to it in the list, it counts as <strong>1 Free Mint WL</strong>
-            </div>
-
-            <div class="results-box" id="results">
-              <div class="result-main-text">
-                Enter your address and let the jungle decide your fate…
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: CREATURE / LORE -->
-        <div class="panel creature-panel">
-          <div class="creature-silhouette">
-            <!-- Put your Erebus character silhouette image here -->
-            <img src="erebus-character.png" alt="Erebus Creature">
-          </div>
-          <div class="creature-copy">
-            <p>
-              Within the <span class="accent">violet jungle</span> of Erebus, only a few
-              wanderers carry the ancient <strong>ID Pass sigil</strong>.  
-              Each pass is a promise: a free step through the gate when the
-              mainnet rift opens on <strong>29 November</strong>.
-            </p>
-            <p style="margin-top: 8px;">
-              Connect your fate by checking your address above.  
-              If the mark of Erebus is carved into your wallet, the portal
-              will whisper: <strong>“Free Mint WL detected.”</strong>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <footer>
-        <span>Snapshot source: Erebus: ID Pass holders list</span>
-        <span>Testnet checker · UI crafted for the Erebus jungle</span>
-      </footer>
-    </section>
-  </main>
-
   <script>
-    /***********************
-     *  FLOATING QUOTES
-     ***********************/
-    const quotes = [
-      "THE JUNGLE REMEMBERS EVERY ADDRESS.",
-      "ONLY THE MARKED WALK IN FOR FREE.",
-      "ID PASS HOLDERS BEND FATE, NOT GAS.",
-      "WHERE DARKNESS THICKENS, MINTS ARE BORN.",
-      "EACH PASS IS A KEY TO A SLEEPING PORTAL."
-    ];
+    // ===============================
+    // 1) PASTE YOUR SNAPSHOT HERE
+    // ===============================
+    //
+    // Format:
+    //   "address in checksum or lowercase": amount,
+    //
+    // IMPORTANT:
+    // - Keep quotes around the address.
+    // - Make sure there is a comma at the end of each line except the last one.
+    // - You can use checksum (mixed case) or all lowercase; the checker normalizes it.
 
-    function spawnFloatingQuotes() {
-      const container = document.getElementById("floatingQuotes");
-      const viewportWidth = window.innerWidth;
-      quotes.forEach((q, index) => {
-        const el = document.createElement("div");
-        el.className = "quote";
-        el.textContent = q;
-
-        const left = 8 + (index * 16) + Math.random() * 10;
-        const duration = 30 + Math.random() * 18;
-        const delay = -Math.random() * duration;
-
-        el.style.left = left + "%";
-        el.style.animationDuration = duration + "s";
-        el.style.animationDelay = delay + "s";
-
-        container.appendChild(el);
-      });
-    }
-    spawnFloatingQuotes();
-
-    /***********************
-     * ADDRESS LIST PARSER
-     ***********************/
-
-    // Paste your full snapshot list exactly in this format:
-    // address [optionalCount]
-    // If the count is missing, it will default to 1.
-    const rawSnapshot = `
-0xC0a5c79f0f662A849928F094Ca1503e77Ba3F902 324
+    const holders = {
+      0xC0a5c79f0f662A849928F094Ca1503e77Ba3F902 324
 0x9F7F5762E73a79Fe3dA828436dB53F32aEF59193 11 
 0x75D91AEbA639d7A8BEe823A02d3D4c4095f01E05 10
 0x2D9D14Cd8f1f7b1506fb62F7d2310855e37ea645 10
@@ -3049,120 +2544,93 @@
 0x000E53FaA6e2def3965A23F565680A26771e5629
 0x000361cB0078b5567A59FDD4e395D89042D2Ba5E
 0x000009690c0763C1c79C30B2C54B960CAb48b5e8
+    };
 
-    function buildAddressMap(raw) {
-      const map = {};
-      raw
-        .split("\n")
-        .map(l => l.trim())
-        .filter(l => l && !l.startsWith("/*") && !l.startsWith("*"))
-        .forEach(line => {
-          const parts = line.split(/\s+/);
-          const addr = parts[0];
-          if (!addr || !addr.startsWith("0x")) return;
-          const count = parts[1] ? parseInt(parts[1], 10) || 1 : 1;
-          map[addr.toLowerCase()] = count;
-        });
-      return map;
+    // ===============================
+    // 2) INTERNAL NORMALIZED MAP
+    // ===============================
+    const normalizedHolders = {};
+    for (const [addr, amount] of Object.entries(holders)) {
+      if (!addr) continue;
+      normalizedHolders[addr.toLowerCase()] = Number(amount);
     }
 
-    const addressMap = buildAddressMap(rawSnapshot);
+    // Precompute some stats
+    const holdersCount = Object.keys(normalizedHolders).length;
+    const totalAmount = Object.values(normalizedHolders).reduce(
+      (acc, n) => acc + (isNaN(n) ? 0 : n),
+      0
+    );
 
-    /***********************
-     * CHECK LOGIC + PORTAL
-     ***********************/
-    const walletInput = document.getElementById("walletInput");
-    const resultsBox = document.getElementById("results");
-    const portalOverlay = document.getElementById("portalOverlay");
+    // ===============================
+    // 3) UI LOGIC
+    // ===============================
+    const walletInput = document.getElementById("wallet");
+    const resultBox = document.getElementById("result");
     const checkBtn = document.getElementById("checkBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const holdersCountSpan = document.getElementById("holdersCount");
+    const totalAmountSpan = document.getElementById("totalAmount");
 
-    function showPortal(callback) {
-      portalOverlay.classList.add("active");
-      setTimeout(() => {
-        portalOverlay.classList.remove("active");
-        if (callback) callback();
-      }, 1350); // match portal animation ~1.4s
+    // Show stats
+    holdersCountSpan.textContent = `Unique wallets: ${holdersCount}`;
+    totalAmountSpan.textContent = `Total amount in snapshot: ${totalAmount}`;
+
+    function setResult(message, isError = false) {
+      resultBox.textContent = message;
+      resultBox.classList.toggle("error", isError);
+      resultBox.style.display = "block";
     }
 
-    function renderResult(status, message, extra) {
-      resultsBox.innerHTML = "";
-
-      const pill = document.createElement("div");
-      pill.className = "result-pill";
-      if (status === "bad") pill.classList.add("bad");
-      pill.innerHTML = status === "good"
-        ? `<span>FREE MINT WL</span> · EREBUS APPROVES`
-        : `<span>NO ID PASS</span> · NOT ON WL`;
-
-      const main = document.createElement("div");
-      main.className = "result-main-text";
-      main.innerHTML = message;
-
-      resultsBox.appendChild(pill);
-      resultsBox.appendChild(main);
-
-      if (extra) {
-        const extraEl = document.createElement("div");
-        extraEl.className = "result-extra";
-        extraEl.innerHTML = extra;
-        resultsBox.appendChild(extraEl);
-      }
+    function clearResult() {
+      resultBox.style.display = "none";
+      resultBox.textContent = "";
+      resultBox.classList.remove("error");
     }
 
-    function isLikelyAddress(addr) {
-      if (!addr) return false;
-      if (!addr.startsWith("0x")) return false;
-      return addr.length >= 10; // be lenient, testnet only
-    }
+    checkBtn.addEventListener("click", () => {
+      clearResult();
 
-    function handleCheck() {
-      const raw = walletInput.value.trim();
-      if (!raw) {
-        renderResult(
-          "bad",
-          "No address detected. The jungle cannot read empty pockets.",
-          "Paste a wallet address that interacted with the Erebus: ID Pass collection."
-        );
-        return;
-      }
-      if (!isLikelyAddress(raw)) {
-        renderResult(
-          "bad",
-          "This doesn’t look like a valid address.",
-          "Addresses should start with <code>0x</code>. Double-check and try again."
-        );
+      const input = walletInput.value.trim();
+      if (!input) {
+        setResult("Please paste a valid wallet address.", true);
         return;
       }
 
-      showPortal(() => {
-        const key = raw.toLowerCase();
-        const count = addressMap[key];
+      const normalized = input.toLowerCase();
 
-        if (typeof count === "number" && count > 0) {
-          const plural = count === 1 ? "Free Mint" : "Free Mints";
-          renderResult(
-            "good",
-            `Your wallet <code>${raw}</code> holds <strong>${count}</strong> Erebus: ID Pass NFT${count > 1 ? "s" : ""}.`,
-            `You are eligible for <strong>${count} ${plural} WL</strong> in the Erebus mainnet mint on <strong>29 November</strong>.`
-          );
-        } else {
-          renderResult(
-            "bad",
-            `No Erebus: ID Pass NFTs found for <code>${raw}</code>.`,
-            `This address is not part of the Free Mint WL snapshot.  
-            If you believe this is a mistake, contact the team on <a href="https://x.com/ErebusNFT" target="_blank" rel="noopener noreferrer">@ErebusNFT</a>.`
-          );
-        }
-      });
-    }
+      if (!normalized.startsWith("0x") || normalized.length < 10) {
+        setResult("This doesn't look like a valid Ethereum-style address.", true);
+        return;
+      }
 
-    checkBtn.addEventListener("click", handleCheck);
+      const amount = normalizedHolders[normalized];
+
+      if (amount === undefined) {
+        setResult(
+          "No entry found for this address in this snapshot. " +
+            "If you bought later, you might not be included.",
+          true
+        );
+      } else {
+        setResult(
+          `Address: ${input}\n\nHolds: ` +
+            `${amount} (units in this snapshot).`
+        );
+      }
+    });
+
+    clearBtn.addEventListener("click", () => {
+      walletInput.value = "";
+      clearResult();
+      walletInput.focus();
+    });
+
     walletInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
-        handleCheck();
+        checkBtn.click();
       }
     });
   </script>
 </body>
 </html>
-
