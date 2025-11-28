@@ -17,6 +17,7 @@
       --success: #7cf2c4;
       --border-subtle: rgba(255, 255, 255, 0.06);
       --pill-bg: rgba(12, 4, 32, 0.9);
+      --monad-purple: #d9b3ff; /* NEW: visible purple */
     }
 
     * {
@@ -161,19 +162,20 @@
       color: rgba(214, 198, 255, 0.6);
     }
 
+    /* ★ MONAD badge now purple & visible */
     .network-pill {
       padding: 6px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(11, 5, 32, 0.95));
-      color: #050012;
+      background: radial-gradient(circle at top, var(--monad-purple), #4c1a85);
+      color: #140013;
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.22);
       box-shadow:
-        0 0 0 1px rgba(0, 0, 0, 0.6),
-        0 12px 32px rgba(0, 0, 0, 0.9);
+        0 0 12px rgba(207, 147, 255, 0.85),
+        0 0 32px rgba(162, 92, 255, 0.45);
     }
 
     .top-meta {
@@ -230,16 +232,7 @@
       color: rgba(231, 220, 255, 0.8);
     }
 
-    .checker-subtext {
-      font-size: 11px;
-      color: rgba(215, 200, 255, 0.7);
-      margin-bottom: 10px;
-    }
-
-    .checker-subtext span {
-      color: var(--accent-strong);
-      font-weight: 500;
-    }
+    /* ★ REMOVED the text here as requested */
 
     .input-row {
       display: flex;
@@ -279,18 +272,6 @@
       transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease;
     }
 
-    #walletInput::placeholder {
-      color: rgba(164, 147, 214, 0.7);
-    }
-
-    #walletInput:focus {
-      border-color: var(--accent);
-      box-shadow:
-        0 0 0 1px rgba(173, 131, 255, 0.5),
-        0 0 26px rgba(164, 116, 255, 0.85);
-      transform: translateY(-1px);
-    }
-
     #checkButton {
       padding: 0 18px;
       border-radius: 999px;
@@ -305,23 +286,6 @@
       box-shadow:
         0 0 0 1px rgba(69, 20, 110, 0.9),
         0 14px 32px rgba(0, 0, 0, 0.8);
-      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
-      white-space: nowrap;
-    }
-
-    #checkButton:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.06);
-      box-shadow:
-        0 0 0 1px rgba(140, 88, 230, 1),
-        0 18px 40px rgba(0, 0, 0, 0.95);
-    }
-
-    #checkButton:active {
-      transform: translateY(0);
-      box-shadow:
-        0 0 0 1px rgba(140, 88, 230, 1),
-        0 8px 22px rgba(0, 0, 0, 0.9);
     }
 
     .status-text {
@@ -330,35 +294,18 @@
       margin-top: 4px;
     }
 
-    .status-text span.label {
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-size: 10px;
-      color: rgba(225, 214, 255, 0.8);
-      margin-right: 6px;
-    }
-
-    .status-text span.value {
-      font-weight: 600;
-    }
-
-    .status-loading {
-      color: rgba(224, 210, 255, 0.85);
-    }
-
-    .status-error {
-      color: var(--error);
-    }
-
     .status-success {
       color: var(--success);
     }
-
+    .status-error {
+      color: var(--error);
+    }
     .status-none {
       color: rgba(204, 189, 255, 0.9);
     }
-
-    /* Right panel image card */
+    .status-loading {
+      color: rgba(224, 210, 255, 0.85);
+    }
 
     .image-shell {
       height: 100%;
@@ -374,7 +321,6 @@
       justify-content: center;
       position: relative;
       overflow: hidden;
-      animation: floatImage 14s ease-in-out infinite alternate;
     }
 
     .image-inner {
@@ -383,15 +329,12 @@
       position: relative;
       width: 100%;
       aspect-ratio: 4 / 3;
-      background: #050013;
     }
 
     .jungle-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
-      filter: saturate(1.2);
     }
 
     .character-layer {
@@ -407,95 +350,22 @@
       width: 48%;
       max-width: 260px;
       transform-origin: center bottom;
-      animation: floatCharacter 7s ease-in-out infinite alternate;
       filter: drop-shadow(0 12px 26px rgba(0, 0, 0, 0.9));
+      animation: floatCharacter 7s ease-in-out infinite alternate;
     }
 
     .character-image {
       width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    /* Animations */
-    @keyframes floatFrame {
-      0%   { transform: translateY(0) translateX(0); }
-      100% { transform: translateY(-6px) translateX(2px); }
-    }
-
-    @keyframes driftGlow {
-      0%   { transform: translate3d(0, 0, 0) scale(1); }
-      100% { transform: translate3d(-5%, -4%, 0) scale(1.02); }
-    }
-
-    @keyframes floatInner {
-      0%   { transform: translateY(0); }
-      100% { transform: translateY(-4px); }
-    }
-
-    @keyframes floatImage {
-      0%   { transform: translateY(4px); }
-      100% { transform: translateY(-4px); }
     }
 
     @keyframes floatCharacter {
-      0%   { transform: translateY(4px) scale(1); }
+      0% { transform: translateY(4px) scale(1); }
       100% { transform: translateY(-4px) scale(1.02); }
     }
 
-    @media (max-width: 900px) {
-      body {
-        padding: 20px 10px;
-      }
-
-      .outer-frame {
-        max-width: 620px;
-      }
-
-      .inner-card {
-        flex-direction: column;
-        padding: 20px 18px 22px;
-      }
-
-      .header-row {
-        flex-direction: row;
-        gap: 12px;
-        align-items: center;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      .image-shell {
-        margin-top: 10px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .header-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .network-pill {
-        margin-top: 4px;
-      }
-
-      .checker-card {
-        padding: 14px 14px 12px;
-      }
-
-      #walletInput {
-        padding-left: 110px;
-      }
-
-      .input-prefix {
-        font-size: 10px;
-      }
-    }
   </style>
 </head>
+
 <body>
   <div class="glow-orbit"></div>
 
@@ -506,18 +376,21 @@
           <div class="header-row">
             <div class="logo-pill">
               <div class="logo-pill-icon">
-                <img src="erebus-logo.png" alt="Erebus" style="width: 22px; height: 22px; border-radius: 999px;" />
+                <img src="erebus-logo.png" alt="Erebus" style="width:22px;height:22px;border-radius:999px;" />
               </div>
               <div class="logo-pill-text">
                 <span class="logo-pill-title">Erebus ID Pass</span>
                 <span class="logo-pill-sub">WL Checker</span>
               </div>
             </div>
+
+            <!-- ★ Purple MONAD badge -->
             <div class="network-pill">MONAD</div>
           </div>
 
           <div class="top-meta">WL Checker</div>
           <h1>Check if a wallet has Free mint WL</h1>
+
           <p class="lead">
             Paste any EVM wallet. The checker reads the official
             <strong>Erebus: ID Pass snapshot</strong>
@@ -529,23 +402,15 @@
               <span>Wallet address</span>
               <span>Snapshot-based only</span>
             </div>
-            <div class="checker-subtext">
-              Snapshot is <span>static</span>. No on-chain calls, no raffles, no randomness.
-              Addresses without a number count as <span>1 Free mint WL</span>.
-            </div>
+
+            <!-- ★ REMOVED THE ENTIRE LONG TEXT HERE -->
 
             <div class="input-row">
               <div class="input-wrapper">
                 <div class="input-prefix">Address</div>
-                <input
-                  id="walletInput"
-                  type="text"
-                  placeholder="0x0000... paste wallet here"
-                  autocomplete="off"
-                  spellcheck="false"
-                />
+                <input id="walletInput" type="text" placeholder="0x0000..." autocomplete="off" />
               </div>
-              <button id="checkButton" type="button">Check</button>
+              <button id="checkButton">Check</button>
             </div>
 
             <div id="status" class="status-text">
@@ -559,10 +424,10 @@
       <div class="right-panel">
         <div class="image-shell">
           <div class="image-inner">
-            <img src="erebus-jungle.png" alt="Erebus jungle" class="jungle-image" />
+            <img src="erebus-jungle.png" class="jungle-image" />
             <div class="character-layer">
               <div class="character-inner">
-                <img src="erebus-character.png" alt="Erebus" class="character-image" />
+                <img src="erebus-character.png" class="character-image" />
               </div>
             </div>
           </div>
@@ -582,40 +447,32 @@
 
       let snapshotLoaded = false;
       let snapshotError = false;
-      let wlMap = new Map(); // address (lowercase) -> total mints
+      let wlMap = new Map();
 
-      function setStatus(kind, message) {
+      function setStatus(kind, msg) {
         statusEl.innerHTML =
           '<span class="label">Status</span> <span class="value ' +
-          kind +
-          '">' +
-          message +
-          "</span>";
+          kind + '">' + msg + '</span>';
       }
 
       function parseSnapshot(text) {
         const map = new Map();
-
         const lines = text.split(/\r?\n/);
+
         for (let raw of lines) {
           const line = raw.trim();
           if (!line) continue;
 
-          // Replace commas & tabs with spaces, then split
           const cleaned = line.replace(/[,;\t]/g, " ");
           const parts = cleaned.split(/\s+/);
 
-          if (parts.length === 0) continue;
-
-          const addr = (parts[0] || "").trim();
+          const addr = parts[0]?.trim();
           if (!addr || !addr.toLowerCase().startsWith("0x")) continue;
 
           let amount = 1;
           if (parts.length > 1) {
             const maybe = parseInt(parts[1], 10);
-            if (!isNaN(maybe) && maybe > 0) {
-              amount = maybe;
-            }
+            if (!isNaN(maybe) && maybe > 0) amount = maybe;
           }
 
           const key = addr.toLowerCase();
@@ -626,69 +483,44 @@
         return map;
       }
 
-      // Load snapshot
       fetch(snapshotUrl + "?t=" + Date.now())
-        .then((res) => {
-          if (!res.ok) throw new Error("HTTP " + res.status);
-          return res.text();
-        })
-        .then((text) => {
+        .then(res => res.text())
+        .then(text => {
           wlMap = parseSnapshot(text);
           snapshotLoaded = true;
           setStatus("status-none", "Snapshot loaded. Paste a wallet to check.");
         })
-        .catch((err) => {
-          console.error("Snapshot load error:", err);
+        .catch(() => {
           snapshotError = true;
-          setStatus(
-            "status-error",
-            "Could not load snapshot. Please refresh the page."
-          );
+          setStatus("status-error", "Failed to load snapshot.");
         });
 
       function checkWallet() {
         const input = walletInput.value.trim();
         if (!input) {
-          setStatus("status-error", "Please paste a wallet address first.");
+          setStatus("status-error", "Please paste a wallet address.");
           return;
         }
 
         if (!snapshotLoaded) {
-          if (snapshotError) {
-            setStatus(
-              "status-error",
-              "Snapshot failed to load. Try refreshing the page."
-            );
-          } else {
-            setStatus("status-loading", "Snapshot is still loading…");
-          }
+          if (snapshotError) setStatus("status-error", "Snapshot error.");
+          else setStatus("status-loading", "Loading snapshot…");
           return;
         }
 
-        const addrKey = input.toLowerCase();
-        const mints = wlMap.get(addrKey) || 0;
+        const key = input.toLowerCase();
+        const count = wlMap.get(key) || 0;
 
-        if (mints > 0) {
-          const label =
-            mints === 1 ? "1 Free mint WL" : mints + " Free mint WL mints";
-          setStatus(
-            "status-success",
-            "✅ Eligible – " + label + " for this wallet."
-          );
+        if (count > 0) {
+          setStatus("status-success", "✅ Eligible – " + count + " Free mint WL");
         } else {
-          setStatus(
-            "status-none",
-            "❌ This wallet has no Free mint WL in the snapshot."
-          );
+          setStatus("status-none", "❌ This wallet has no WL");
         }
       }
 
       checkButton.addEventListener("click", checkWallet);
-      walletInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          checkWallet();
-        }
+      walletInput.addEventListener("keydown", e => {
+        if (e.key === "Enter") checkWallet();
       });
     })();
   </script>
