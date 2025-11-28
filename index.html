@@ -6,782 +6,691 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
-      --bg: #05010b;
-      --card-bg: radial-gradient(circle at top left, #2b1449 0, #100318 35%, #05010b 100%);
-      --accent: #b87bff;
-      --accent-soft: rgba(184, 123, 255, 0.3);
-      --accent-strong: rgba(184, 123, 255, 0.9);
-      --text-main: #f9f4ff;
-      --text-soft: #b8a7ff;
-      --text-muted: #7b6caa;
-      --input-bg: rgba(8, 3, 18, 0.8);
-      --pill-bg: linear-gradient(135deg, #251637, #05010b);
-      --pill-border: rgba(247, 239, 255, 0.25);
-      --danger: #ff4d8b;
-      --success: #73ffa1;
+      --bg-dark: #070211;
+      --card-bg: rgba(12, 4, 32, 0.96);
+      --accent: #c084ff;
+      --accent-strong: #f5a3ff;
+      --accent-soft: rgba(192, 132, 255, 0.28);
+      --text-main: #f9f5ff;
+      --text-muted: #a89cc8;
+      --error: #ff6b81;
+      --success: #7cf2c4;
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --pill-bg: rgba(12, 4, 32, 0.9);
     }
 
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Inter", sans-serif;
+      background: radial-gradient(circle at top, #301757 0, #060111 55%, #030008 100%);
+      color: var(--text-main);
+      overflow-x: hidden;
     }
 
     body {
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
-      background: radial-gradient(circle at 10% -10%, #2b0c4d 0, #05010b 40%, #020008 100%);
-      color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      overflow: hidden;
+      padding: 32px 16px;
     }
 
-    .glow-orb {
+    .glow-orbit {
       position: fixed;
-      width: 520px;
-      height: 520px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(151, 93, 255, 0.6), transparent 70%);
-      filter: blur(2px);
-      opacity: 0.35;
-      z-index: -3;
-      animation: orbFloat 22s ease-in-out infinite alternate;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 5% 10%, rgba(184, 115, 255, 0.16), transparent 55%),
+        radial-gradient(circle at 80% 90%, rgba(72, 149, 239, 0.18), transparent 60%);
+      opacity: 0.8;
+      mix-blend-mode: screen;
+      z-index: -2;
     }
 
-    .glow-orb:nth-child(1) {
-      top: -120px;
-      left: -120px;
-    }
-
-    .glow-orb:nth-child(2) {
-      bottom: -160px;
-      right: -80px;
-      animation-delay: 4s;
-      opacity: 0.25;
-      background: radial-gradient(circle, rgba(255, 90, 190, 0.5), transparent 70%);
-    }
-
-    .glow-orb:nth-child(3) {
-      top: 40%;
-      left: 10%;
-      width: 320px;
-      height: 320px;
-      opacity: 0.18;
-      background: radial-gradient(circle, rgba(117, 208, 255, 0.45), transparent 70%);
-      animation-delay: 8s;
-    }
-
-    @keyframes orbFloat {
-      0% {
-        transform: translate3d(0, 0, 0) scale(1);
-      }
-      50% {
-        transform: translate3d(40px, -30px, 0) scale(1.05);
-      }
-      100% {
-        transform: translate3d(-20px, 30px, 0) scale(1.02);
-      }
-    }
-
-    .shell {
-      max-width: 1180px;
+    .outer-frame {
+      max-width: 1120px;
       width: 100%;
       border-radius: 32px;
-      background: radial-gradient(circle at top left, #35144d 0, #090010 38%, #020008 100%);
+      padding: 2px;
+      background:
+        radial-gradient(circle at top left, rgba(222, 180, 255, 0.5), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(124, 252, 194, 0.4), transparent 55%);
       box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.02),
-        0 40px 90px rgba(0, 0, 0, 0.85),
-        0 0 80px rgba(184, 123, 255, 0.2);
-      padding: 32px 32px 40px;
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 40px 120px rgba(0, 0, 0, 0.95);
+      animation: floatFrame 10s ease-in-out infinite alternate;
+    }
+
+    .inner-card {
+      background: radial-gradient(circle at top, #180528 0, #070011 55%, #05000b 100%);
+      border-radius: 30px;
+      padding: 28px 28px 32px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      gap: 32px;
+      align-items: stretch;
       position: relative;
       overflow: hidden;
-      animation: cardFloat 18s ease-in-out infinite alternate;
     }
 
-    @keyframes cardFloat {
-      0% {
-        transform: translate3d(0, 0, 0);
-      }
-      100% {
-        transform: translate3d(0, -8px, 0);
-      }
-    }
-
-    .shell::before {
+    .inner-card::before {
       content: "";
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top center, rgba(218, 160, 255, 0.12), transparent 55%);
-      opacity: 0.9;
+      inset: -60%;
+      background:
+        radial-gradient(circle at 0 0, rgba(224, 187, 255, 0.11), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(86, 240, 199, 0.12), transparent 55%);
+      opacity: 0.45;
       pointer-events: none;
+      z-index: -1;
+      animation: driftGlow 24s linear infinite alternate;
     }
 
-    header {
+    .left-panel,
+    .right-panel {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .left-panel {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: space-between;
-      margin-bottom: 28px;
-      position: relative;
-      z-index: 2;
+      gap: 32px;
     }
 
-    .brand {
+    .header-row {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 14px;
+      margin-bottom: 24px;
     }
 
-    .brand-logo {
-      width: 44px;
-      height: 44px;
+    .logo-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px 6px 6px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #ffffff, #f7e7ff);
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), rgba(18, 7, 39, 0.9));
       box-shadow:
-        0 0 0 2px rgba(171, 123, 255, 0.35),
-        0 12px 40px rgba(88, 45, 198, 0.85);
+        0 0 0 1px rgba(255, 255, 255, 0.06),
+        0 10px 30px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-pill-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 25% 15%, #fdfbff, #c084ff);
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-    }
-
-    .brand-logo img {
-      width: 75%;
-      height: 75%;
-      object-fit: contain;
-    }
-
-    .brand-text-main {
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .brand-title {
-      font-size: 14px;
-      color: var(--text-main);
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      opacity: 0.9;
-    }
-
-    .pill {
-      padding: 7px 18px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.08), transparent 70%), var(--pill-bg);
-      border: 1px solid var(--pill-border);
+      color: #1b0426;
+      font-size: 18px;
+      font-weight: 700;
       box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.04),
-        0 0 32px rgba(166, 125, 255, 0.45);
+        0 0 0 2px rgba(16, 0, 32, 0.8),
+        0 0 22px rgba(197, 148, 255, 0.65);
+    }
+
+    .logo-pill-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .logo-pill-title {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .logo-pill-sub {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(214, 198, 255, 0.6);
+    }
+
+    .network-pill {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(11, 5, 32, 0.95));
+      color: #050012;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.6),
+        0 12px 32px rgba(0, 0, 0, 0.9);
+    }
+
+    .top-meta {
       font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #fdf7ff;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .pill-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: radial-gradient(circle, #c7ffeb, #73ffa1);
-      box-shadow: 0 0 14px rgba(115, 255, 161, 0.9);
-    }
-
-    .content-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-      gap: 36px;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* LEFT PANEL (TEXT + CHECKER) */
-
-    .text-block {
-      padding-right: 8px;
-    }
-
-    .eyebrow {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.24em;
-      color: var(--text-soft);
-      margin-bottom: 12px;
+      color: rgba(224, 208, 255, 0.78);
+      margin-bottom: 10px;
     }
 
     h1 {
-      font-size: 32px;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-      color: var(--text-main);
-      text-shadow: 0 0 18px rgba(186, 122, 255, 0.65);
+      font-size: 28px;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      color: #fef9ff;
+      text-shadow:
+        0 0 18px rgba(197, 148, 255, 0.85),
+        0 0 40px rgba(92, 0, 255, 0.4);
     }
 
-    .subtitle {
-      font-size: 13px;
+    .lead {
+      font-size: 14px;
       line-height: 1.6;
-      color: var(--text-soft);
+      color: var(--text-muted);
       max-width: 420px;
     }
 
-    .subtitle strong {
-      color: var(--text-main);
+    .lead strong {
+      color: var(--accent-strong);
       font-weight: 600;
     }
 
     .checker-card {
-      margin-top: 28px;
-      padding: 16px 18px 18px;
-      border-radius: 18px;
-      background: linear-gradient(140deg, rgba(9, 0, 20, 0.8), rgba(20, 3, 47, 0.98));
-      border: 1px solid rgba(220, 188, 255, 0.18);
+      margin-top: 20px;
+      padding: 18px 18px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      background: radial-gradient(circle at top left, rgba(144, 101, 232, 0.16), rgba(11, 3, 35, 0.96));
       box-shadow:
-        0 18px 42px rgba(0, 0, 0, 0.9),
-        0 0 28px rgba(138, 100, 255, 0.25);
-      backdrop-filter: blur(28px);
+        0 18px 40px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(173, 131, 255, 0.2);
+      backdrop-filter: blur(18px);
+      animation: floatInner 12s ease-in-out infinite alternate;
     }
 
     .checker-label-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 11px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(231, 220, 255, 0.8);
+    }
+
+    .checker-subtext {
+      font-size: 11px;
+      color: rgba(215, 200, 255, 0.7);
       margin-bottom: 10px;
     }
 
-    .checker-label {
-      font-size: 11px;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      color: var(--text-muted);
+    .checker-subtext span {
+      color: var(--accent-strong);
+      font-weight: 500;
     }
 
-    .checker-meta {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--text-muted);
-    }
-
-    .input-wrap {
+    .input-row {
       display: flex;
       align-items: stretch;
       gap: 10px;
       margin-bottom: 10px;
     }
 
-    .input-shell {
-      flex: 1;
+    .input-wrapper {
       position: relative;
+      flex: 1;
     }
 
-    input[type="text"] {
+    .input-prefix {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(211, 198, 255, 0.78);
+      padding-right: 8px;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    #walletInput {
       width: 100%;
-      padding: 12px 44px 12px 13px;
+      background: rgba(5, 1, 20, 0.98);
       border-radius: 999px;
-      border: 1px solid rgba(204, 175, 255, 0.35);
-      background: radial-gradient(circle at top left, rgba(45, 19, 85, 0.74), rgba(7, 2, 23, 0.98));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 11px 14px 11px 120px;
       color: var(--text-main);
       font-size: 13px;
       outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease;
+    }
+
+    #walletInput::placeholder {
+      color: rgba(164, 147, 214, 0.7);
+    }
+
+    #walletInput:focus {
+      border-color: var(--accent);
       box-shadow:
-        inset 0 0 0 1px rgba(0, 0, 0, 0.7),
-        0 0 18px rgba(178, 133, 255, 0.3);
-      caret-color: var(--accent);
+        0 0 0 1px rgba(173, 131, 255, 0.5),
+        0 0 26px rgba(164, 116, 255, 0.85);
+      transform: translateY(-1px);
     }
 
-    input[type="text"]::placeholder {
-      color: var(--text-muted);
-    }
-
-    .prefix {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 10px;
-      letter-spacing: 0.19em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    button {
-      padding: 11px 18px;
+    #checkButton {
+      padding: 0 18px;
       border-radius: 999px;
       border: none;
-      outline: none;
       cursor: pointer;
-      background: radial-gradient(circle at 10% 0, #f8f5ff, #d8c4ff);
-      color: #140421;
-      font-weight: 600;
-      font-size: 13px;
-      letter-spacing: 0.12em;
+      background: radial-gradient(circle at top left, #fdfbff, #c084ff);
+      color: #190322;
+      font-size: 11px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
+      font-weight: 700;
       box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.6),
-        0 10px 30px rgba(216, 176, 255, 0.8);
-      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, background 0.12s ease-out;
+        0 0 0 1px rgba(69, 20, 110, 0.9),
+        0 14px 32px rgba(0, 0, 0, 0.8);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
       white-space: nowrap;
     }
 
-    button:hover {
+    #checkButton:hover {
       transform: translateY(-1px);
+      filter: brightness(1.06);
       box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.8),
-        0 14px 40px rgba(226, 190, 255, 0.95);
-      background: radial-gradient(circle at 10% 0, #ffffff, #ebddff);
+        0 0 0 1px rgba(140, 88, 230, 1),
+        0 18px 40px rgba(0, 0, 0, 0.95);
     }
 
-    button:active {
+    #checkButton:active {
       transform: translateY(0);
       box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.9),
-        0 6px 18px rgba(160, 110, 230, 0.9);
+        0 0 0 1px rgba(140, 88, 230, 1),
+        0 8px 22px rgba(0, 0, 0, 0.9);
     }
 
-    .hint {
-      font-size: 11px;
-      color: var(--text-muted);
+    .status-text {
+      min-height: 18px;
+      font-size: 12px;
+      margin-top: 4px;
     }
 
-    .result {
-      margin-top: 14px;
-      border-radius: 15px;
-      padding: 10px 12px 11px;
-      background: radial-gradient(circle at 0 0, rgba(36, 255, 191, 0.06), transparent 70%), rgba(7, 1, 22, 0.94);
-      border: 1px solid rgba(178, 150, 255, 0.4);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 42px;
-      font-size: 13px;
-      line-height: 1.4;
+    .status-text span.label {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 10px;
+      color: rgba(225, 214, 255, 0.8);
+      margin-right: 6px;
     }
 
-    .result-icon {
-      width: 11px;
-      height: 11px;
-      border-radius: 999px;
-      background: radial-gradient(circle, #c7ffeb, #73ffa1);
-      box-shadow: 0 0 15px rgba(115, 255, 161, 0.95);
-      flex-shrink: 0;
-    }
-
-    .result-icon.error {
-      background: radial-gradient(circle, #ffb4d1, #ff4d8b);
-      box-shadow: 0 0 15px rgba(255, 90, 154, 1);
-    }
-
-    .result-title {
+    .status-text span.value {
       font-weight: 600;
-      color: var(--text-main);
     }
 
-    .result-detail {
-      color: var(--text-soft);
+    .status-loading {
+      color: rgba(224, 210, 255, 0.85);
     }
 
-    /* RIGHT PANEL (ART) */
-
-    .art-wrap {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .status-error {
+      color: var(--error);
     }
 
-    .art-card {
-      width: 100%;
-      max-width: 430px;
-      aspect-ratio: 4 / 3.4;
-      border-radius: 26px;
-      padding: 18px 18px 22px;
-      background: var(--card-bg);
-      border: 1px solid rgba(227, 205, 255, 0.35);
-      box-shadow:
-        0 24px 68px rgba(0, 0, 0, 0.85),
-        0 0 40px rgba(182, 137, 255, 0.42);
-      overflow: hidden;
-      position: relative;
-      animation: artFloat 13s ease-in-out infinite alternate;
+    .status-success {
+      color: var(--success);
     }
 
-    @keyframes artFloat {
-      0% {
-        transform: translate3d(0, 0, 0) scale(1);
-      }
-      100% {
-        transform: translate3d(0, -6px, 0) scale(1.01);
-      }
+    .status-none {
+      color: rgba(204, 189, 255, 0.9);
     }
 
-    .art-inner {
-      position: relative;
-      width: 100%;
+    /* Right panel image card */
+
+    .image-shell {
       height: 100%;
+      border-radius: 26px;
+      padding: 4px;
+      background:
+        radial-gradient(circle at top left, rgba(235, 199, 255, 0.62), rgba(22, 6, 50, 0.98));
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 26px 80px rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      animation: floatImage 14s ease-in-out infinite alternate;
+    }
+
+    .image-inner {
       border-radius: 22px;
       overflow: hidden;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #050013;
     }
 
-    .bg-img {
-      position: absolute;
-      inset: 0;
+    .jungle-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scale(1.04);
-      filter: saturate(1.18) contrast(1.05);
+      display: block;
+      filter: saturate(1.2);
     }
 
-    .character-img {
-      position: absolute;
-      left: 21%;
-      bottom: 4%;
-      width: 29%;
-      height: auto;
-      object-fit: contain;
-      image-rendering: pixelated;
-      filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.85));
-      animation:
-        erebusFloat 7.5s ease-in-out infinite alternate,
-        erebusGlow 5.8s ease-in-out infinite alternate;
-    }
-
-    @keyframes erebusFloat {
-      0% {
-        transform: translate3d(-4px, 3px, 0) scale(1);
-      }
-      100% {
-        transform: translate3d(4px, -6px, 0) scale(1.02);
-      }
-    }
-
-    @keyframes erebusGlow {
-      0% {
-        filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.95));
-      }
-      100% {
-        filter: drop-shadow(0 0 18px rgba(47, 9, 100, 0.95));
-      }
-    }
-
-    .art-pill {
-      position: absolute;
-      top: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 7px 34px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.12), transparent 60%), var(--pill-bg);
-      border: 1px solid rgba(247, 235, 255, 0.55);
-      box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.12),
-        0 0 40px rgba(199, 159, 255, 0.75);
-      color: #fbf6ff;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-align: center;
-    }
-
-    .frame-glow {
-      position: absolute;
-      inset: -30%;
-      background: radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.12), transparent 60%);
-      mix-blend-mode: screen;
-      opacity: 0.65;
-      pointer-events: none;
-    }
-
-    .frame-mask {
+    .character-layer {
       position: absolute;
       inset: 0;
-      box-shadow: inset 0 0 55px rgba(0, 0, 0, 0.9);
-      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       pointer-events: none;
     }
 
-    /* RESPONSIVE */
+    .character-inner {
+      width: 48%;
+      max-width: 260px;
+      transform-origin: center bottom;
+      animation: floatCharacter 7s ease-in-out infinite alternate;
+      filter: drop-shadow(0 12px 26px rgba(0, 0, 0, 0.9));
+    }
+
+    .character-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Animations */
+    @keyframes floatFrame {
+      0%   { transform: translateY(0) translateX(0); }
+      100% { transform: translateY(-6px) translateX(2px); }
+    }
+
+    @keyframes driftGlow {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-5%, -4%, 0) scale(1.02); }
+    }
+
+    @keyframes floatInner {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+
+    @keyframes floatImage {
+      0%   { transform: translateY(4px); }
+      100% { transform: translateY(-4px); }
+    }
+
+    @keyframes floatCharacter {
+      0%   { transform: translateY(4px) scale(1); }
+      100% { transform: translateY(-4px) scale(1.02); }
+    }
 
     @media (max-width: 900px) {
       body {
-        padding: 16px;
+        padding: 20px 10px;
       }
 
-      .shell {
-        padding: 22px 18px 24px;
+      .outer-frame {
+        max-width: 620px;
       }
 
-      .content-row {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 28px;
+      .inner-card {
+        flex-direction: column;
+        padding: 20px 18px 22px;
       }
 
-      .art-card {
-        max-width: 460px;
-        margin-inline: auto;
+      .header-row {
+        flex-direction: row;
+        gap: 12px;
+        align-items: center;
       }
 
       h1 {
-        font-size: 26px;
+        font-size: 24px;
+      }
+
+      .image-shell {
+        margin-top: 10px;
       }
     }
 
-    @media (max-width: 480px) {
-      .input-wrap {
+    @media (max-width: 640px) {
+      .header-row {
         flex-direction: column;
-        align-items: stretch;
+        align-items: flex-start;
       }
 
-      button {
-        width: 100%;
-        justify-content: center;
-        text-align: center;
+      .network-pill {
+        margin-top: 4px;
       }
 
-      .brand-title {
-        font-size: 13px;
+      .checker-card {
+        padding: 14px 14px 12px;
+      }
+
+      #walletInput {
+        padding-left: 110px;
+      }
+
+      .input-prefix {
+        font-size: 10px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- animated glows -->
-  <div class="glow-orb"></div>
-  <div class="glow-orb"></div>
-  <div class="glow-orb"></div>
+  <div class="glow-orbit"></div>
 
-  <main class="shell">
-    <header>
-      <div class="brand">
-        <div class="brand-logo">
-          <!-- local Erebus logo -->
-          <img src="./erebus-logo.png" alt="Erebus logo" />
-        </div>
+  <div class="outer-frame">
+    <div class="inner-card">
+      <div class="left-panel">
         <div>
-          <div class="brand-text-main">Erebus</div>
-          <div class="brand-title">ID Pass · WL Checker</div>
+          <div class="header-row">
+            <div class="logo-pill">
+              <div class="logo-pill-icon">
+                <img src="erebus-logo.png" alt="Erebus" style="width: 22px; height: 22px; border-radius: 999px;" />
+              </div>
+              <div class="logo-pill-text">
+                <span class="logo-pill-title">Erebus ID Pass</span>
+                <span class="logo-pill-sub">WL Checker</span>
+              </div>
+            </div>
+            <div class="network-pill">MONAD</div>
+          </div>
+
+          <div class="top-meta">WL Checker</div>
+          <h1>Check if a wallet has Free mint WL</h1>
+          <p class="lead">
+            Paste any EVM wallet. The checker reads the official
+            <strong>Erebus: ID Pass snapshot</strong>
+            and tells you how many <strong>Free Mint WL mints</strong> that wallet holds.
+          </p>
+
+          <div class="checker-card">
+            <div class="checker-label-row">
+              <span>Wallet address</span>
+              <span>Snapshot-based only</span>
+            </div>
+            <div class="checker-subtext">
+              Snapshot is <span>static</span>. No on-chain calls, no raffles, no randomness.
+              Addresses without a number count as <span>1 Free mint WL</span>.
+            </div>
+
+            <div class="input-row">
+              <div class="input-wrapper">
+                <div class="input-prefix">Address</div>
+                <input
+                  id="walletInput"
+                  type="text"
+                  placeholder="0x0000... paste wallet here"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+              </div>
+              <button id="checkButton" type="button">Check</button>
+            </div>
+
+            <div id="status" class="status-text">
+              <span class="label">Status</span>
+              <span class="value status-loading">Snapshot loading…</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="pill">
-        <span class="pill-dot"></span>
-        <span>FREE MINT WL · SNAPSHOT</span>
-      </div>
-    </header>
-
-    <section class="content-row">
-      <!-- LEFT: copy + checker -->
-      <div class="text-block">
-        <div class="eyebrow">WL Checker</div>
-        <h1>Check if a wallet has Free mint WL</h1>
-        <p class="subtitle">
-          Paste any EVM wallet. The checker reads the official Erebus: ID Pass snapshot and
-          tells you how many <strong>Free Mint WL mints</strong> that wallet holds.
-        </p>
-
-        <div class="checker-card">
-          <div class="checker-label-row">
-            <div class="checker-label">Wallet address</div>
-            <div class="checker-meta">Snapshot-based · No draws</div>
-          </div>
-
-          <div class="input-wrap">
-            <div class="input-shell">
-              <input
-                id="walletInput"
-                type="text"
-                placeholder="0x…"
-                autocomplete="off"
-              />
-              <span class="prefix">EVM</span>
-            </div>
-            <button id="checkBtn">Check</button>
-          </div>
-
-          <div class="hint">
-            Checker uses the static snapshot file <strong>snapshot.txt</strong>.  
-            Addresses without a number count as <strong>1 Free Mint WL</strong>.
-          </div>
-
-          <div class="result" id="resultBox">
-            <div class="result-icon" id="resultIcon"></div>
-            <div>
-              <div class="result-title" id="resultTitle">Waiting for input…</div>
-              <div class="result-detail" id="resultDetail">
-                Paste a wallet and hit <strong>Check</strong> or press <strong>Enter</strong>.
+      <div class="right-panel">
+        <div class="image-shell">
+          <div class="image-inner">
+            <img src="erebus-jungle.png" alt="Erebus jungle" class="jungle-image" />
+            <div class="character-layer">
+              <div class="character-inner">
+                <img src="erebus-character.png" alt="Erebus" class="character-image" />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: pixel art card -->
-      <div class="art-wrap">
-        <div class="art-card">
-          <div class="art-inner">
-            <img src="./erebus-jungle.png" alt="Erebus jungle" class="bg-img" />
-            <img src="./erebus-character.png" alt="Erebus" class="character-img" />
-            <div class="art-pill">Free Mint WL · Snapshot</div>
-            <div class="frame-glow"></div>
-            <div class="frame-mask"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
   <script>
-    // Map<lowercaseAddress, countOfMints>
-    const snapshotMap = new Map();
-    let snapshotLoaded = false;
-    let snapshotError = false;
+    (function () {
+      const snapshotUrl = "snapshot.txt";
 
-    function normaliseAddress(addr) {
-      if (!addr) return "";
-      return addr.trim().toLowerCase();
-    }
+      const statusEl = document.getElementById("status");
+      const walletInput = document.getElementById("walletInput");
+      const checkButton = document.getElementById("checkButton");
 
-    function isEvmAddress(addr) {
-      return /^0x[a-fA-F0-9]{40}$/.test(addr.trim());
-    }
+      let snapshotLoaded = false;
+      let snapshotError = false;
+      let wlMap = new Map(); // address (lowercase) -> total mints
 
-    async function loadSnapshot() {
-      try {
-        const res = await fetch("./snapshot.txt", { cache: "no-store" });
-        if (!res.ok) throw new Error("Snapshot fetch failed");
-        const text = await res.text();
+      function setStatus(kind, message) {
+        statusEl.innerHTML =
+          '<span class="label">Status</span> <span class="value ' +
+          kind +
+          '">' +
+          message +
+          "</span>";
+      }
+
+      function parseSnapshot(text) {
+        const map = new Map();
 
         const lines = text.split(/\r?\n/);
         for (let raw of lines) {
           const line = raw.trim();
-          if (!line || line.startsWith("#")) continue;
+          if (!line) continue;
 
-          // split by any whitespace
-          const parts = line.split(/\s+/);
-          if (!parts[0]) continue;
+          // Replace commas & tabs with spaces, then split
+          const cleaned = line.replace(/[,;\t]/g, " ");
+          const parts = cleaned.split(/\s+/);
 
-          const addr = normaliseAddress(parts[0]);
-          if (!isEvmAddress(addr)) continue;
+          if (parts.length === 0) continue;
 
-          let count = 1;
+          const addr = (parts[0] || "").trim();
+          if (!addr || !addr.toLowerCase().startsWith("0x")) continue;
+
+          let amount = 1;
           if (parts.length > 1) {
-            const maybeNumber = parseInt(parts[1].replace(/[^\d]/g, ""), 10);
-            if (!isNaN(maybeNumber) && maybeNumber > 0) {
-              count = maybeNumber;
+            const maybe = parseInt(parts[1], 10);
+            if (!isNaN(maybe) && maybe > 0) {
+              amount = maybe;
             }
           }
 
-          // combine duplicates
-          const prev = snapshotMap.get(addr) || 0;
-          snapshotMap.set(addr, prev + count);
+          const key = addr.toLowerCase();
+          const prev = map.get(key) || 0;
+          map.set(key, prev + amount);
         }
 
-        snapshotLoaded = true;
-      } catch (err) {
-        console.error("Error loading snapshot:", err);
-        snapshotError = true;
+        return map;
       }
-    }
 
-    function updateResult({ ok, title, detail }) {
-      const box = document.getElementById("resultBox");
-      const icon = document.getElementById("resultIcon");
-      const titleEl = document.getElementById("resultTitle");
-      const detailEl = document.getElementById("resultDetail");
-
-      titleEl.textContent = title;
-      detailEl.innerHTML = detail;
-
-      if (ok === true) {
-        icon.classList.remove("error");
-        box.style.borderColor = "rgba(115,255,161,0.65)";
-      } else if (ok === false) {
-        icon.classList.add("error");
-        box.style.borderColor = "rgba(255,90,154,0.85)";
-      } else {
-        icon.classList.remove("error");
-        box.style.borderColor = "rgba(178,150,255,0.4)";
-      }
-    }
-
-    function handleCheck() {
-      const inputEl = document.getElementById("walletInput");
-      const addrRaw = inputEl.value;
-      const addr = normaliseAddress(addrRaw);
-
-      if (snapshotError) {
-        updateResult({
-          ok: false,
-          title: "Snapshot error",
-          detail: "Could not load <strong>snapshot.txt</strong>. Please refresh or contact the team."
+      // Load snapshot
+      fetch(snapshotUrl + "?t=" + Date.now())
+        .then((res) => {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.text();
+        })
+        .then((text) => {
+          wlMap = parseSnapshot(text);
+          snapshotLoaded = true;
+          setStatus("status-none", "Snapshot loaded. Paste a wallet to check.");
+        })
+        .catch((err) => {
+          console.error("Snapshot load error:", err);
+          snapshotError = true;
+          setStatus(
+            "status-error",
+            "Could not load snapshot. Please refresh the page."
+          );
         });
-        return;
+
+      function checkWallet() {
+        const input = walletInput.value.trim();
+        if (!input) {
+          setStatus("status-error", "Please paste a wallet address first.");
+          return;
+        }
+
+        if (!snapshotLoaded) {
+          if (snapshotError) {
+            setStatus(
+              "status-error",
+              "Snapshot failed to load. Try refreshing the page."
+            );
+          } else {
+            setStatus("status-loading", "Snapshot is still loading…");
+          }
+          return;
+        }
+
+        const addrKey = input.toLowerCase();
+        const mints = wlMap.get(addrKey) || 0;
+
+        if (mints > 0) {
+          const label =
+            mints === 1 ? "1 Free mint WL" : mints + " Free mint WL mints";
+          setStatus(
+            "status-success",
+            "✅ Eligible – " + label + " for this wallet."
+          );
+        } else {
+          setStatus(
+            "status-none",
+            "❌ This wallet has no Free mint WL in the snapshot."
+          );
+        }
       }
 
-      if (!snapshotLoaded) {
-        updateResult({
-          ok: null,
-          title: "Snapshot still loading…",
-          detail: "Give it a second and try again. If this persists, refresh the page."
-        });
-        return;
-      }
-
-      if (!addr) {
-        updateResult({
-          ok: null,
-          title: "Waiting for input…",
-          detail: "Paste a wallet and hit <strong>Check</strong> or press <strong>Enter</strong>."
-        });
-        return;
-      }
-
-      if (!isEvmAddress(addr)) {
-        updateResult({
-          ok: false,
-          title: "Invalid address",
-          detail: "Please paste a valid <strong>EVM</strong> wallet address (0x… with 40 hex characters)."
-        });
-        return;
-      }
-
-      const mints = snapshotMap.get(addr) || 0;
-      if (mints > 0) {
-        const plural = mints === 1 ? "mint" : "mints";
-        updateResult({
-          ok: true,
-          title: "✅ Eligible · Free Mint WL",
-          detail: `This wallet has <strong>${mints} Free Mint WL ${plural}</strong> from the Erebus: ID Pass snapshot.`
-        });
-      } else {
-        updateResult({
-          ok: false,
-          title: "❌ No Free Mint WL",
-          detail: "This wallet is not in the Erebus: ID Pass snapshot. No Free Mint WL mints detected."
-        });
-      }
-    }
-
-    document.getElementById("checkBtn").addEventListener("click", handleCheck);
-
-    document.getElementById("walletInput").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleCheck();
-      }
-    });
-
-    loadSnapshot();
+      checkButton.addEventListener("click", checkWallet);
+      walletInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          checkWallet();
+        }
+      });
+    })();
   </script>
 </body>
 </html>
